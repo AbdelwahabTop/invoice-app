@@ -1,0 +1,1393 @@
+{
+    "urine": {
+        "type": "type",
+        "component": [
+            {
+                "name": "Volume",
+                "type": "Physical Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": ""
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Color",
+                "type": "Physical Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Yellow",
+                    "Pale Yellow",
+                    "White",
+                    "Red",
+                    "Turbid",
+                    "Slightly Turbid"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Yellow",
+                                "high": "",
+                                "name": ""
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Apearance",
+                "type": "Physical Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Clear",
+                    "Turbid",
+                    "Slightly Turbid"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Offensive",
+                                "high": "",
+                                "name": ""
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Specific Gravity",
+                "type": "Physical Examination",
+                "unit": "",
+                "result": "nubmer",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": 102,
+                                "high": 1015,
+                                "name": ""
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Reaction",
+                "type": "Chemical Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Acidic"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Protein",
+                "type": "Chemical Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Glucose",
+                "type": "Chemical Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Acetone",
+                "type": "Chemical Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Nitrite",
+                "type": "Chemical Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Bilirubin",
+                "type": "Chemical Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Urobilinogen",
+                "type": "Chemical Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Normal trace"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Leucocytes",
+                "type": "Chemical Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Blood",
+                "type": "Chemical Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Pus Cells",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "0 - 1"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "RBCs",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "0 - 2"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Epithelial Cells",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Mucus",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Bacteria",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Crystals",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Amorphous",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Casts",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Others",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            }
+        ]
+    },
+    "stool": {
+        "type": "type",
+        "component": [
+            {
+                "name": "color",
+                "type": "Macroscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Black",
+                    "Bloody",
+                    "Brownish",
+                    "Greenish",
+                    "Normal Clay",
+                    "Redish",
+                    "Yellow",
+                    "Yellowish Brown"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Brown",
+                                "high": "",
+                                "name": ""
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Oder",
+                "type": "Macroscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Offensive",
+                    "Faccal"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Offensive",
+                                "high": "",
+                                "name": ""
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "consistency",
+                "type": "Macroscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "formed",
+                    "Consistent",
+                    "Diarrhea",
+                    "Hard",
+                    "Loose",
+                    "Mucoid",
+                    "Soft",
+                    "Liquid"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "formed",
+                                "high": "",
+                                "name": ""
+                            },
+                            {
+                                "low": "semi-soild"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Blood",
+                "type": "Macroscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Absent",
+                    "(Few)",
+                    "+",
+                    "++",
+                    "+++",
+                    "++++"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Mucus",
+                "type": "Macroscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "pH",
+                "type": "Macroscopic Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Alkaline p"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Food Particles",
+                "type": "Macroscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Absent",
+                    "Trace",
+                    "+",
+                    "++",
+                    "+++",
+                    "++++"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Worms",
+                "type": "Macroscopic Examination",
+                "unit": "",
+                "result": "text",
+                "options": [],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Pus Cells",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "0-1",
+                    "1-2",
+                    "2-3",
+                    "3-4",
+                    "4-5",
+                    "5-6",
+                    "6-7",
+                    "7-8",
+                    "8-9",
+                    "9-10",
+                    "10-15",
+                    "15-20",
+                    "20-25",
+                    "25-30",
+                    "30-35",
+                    "35-40",
+                    "40-45",
+                    "45-50",
+                    "Over 50",
+                    "Over 100",
+                    "+",
+                    "++",
+                    "+++",
+                    "++++",
+                    "Full Field"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "0 - 1"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "RBCs",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "0-1",
+                    "1-2",
+                    "2-3",
+                    "3-4",
+                    "4-5",
+                    "5-6",
+                    "6-7",
+                    "7-8",
+                    "8-9",
+                    "9-10",
+                    "10-15",
+                    "15-20",
+                    "20-25",
+                    "25-30",
+                    "30-35",
+                    "35-40",
+                    "40-45",
+                    "45-50",
+                    "Over 50",
+                    "Over 100",
+                    "+",
+                    "++",
+                    "+++",
+                    "++++",
+                    "Full Field"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "0 - 1"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Undigested Food",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Absent",
+                    "+",
+                    "++",
+                    "+++",
+                    "++++",
+                    "Meat Fibers (Few)",
+                    "Meat Fibers +",
+                    "Meat Fibers ++",
+                    "Meat Fibers +++",
+                    "Meat Fibers ++++",
+                    "Meat Fibers and Vegetables +",
+                    "Meat Fibers and Vegetables ++",
+                    "Meat Fibers and Vegetables +++",
+                    "Meat Fibers and Vegetables ++++",
+                    "Plant Fibers (Few)",
+                    "Plant Fibers +",
+                    "Plant Fibers ++",
+                    "Plant Fibers +++",
+                    "Plant Fibers ++++"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Fats",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Absent",
+                    "Trace",
+                    "+",
+                    "++",
+                    "+++",
+                    "++++"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Starch",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Absent",
+                    "Trace",
+                    "+",
+                    "++",
+                    "+++",
+                    "++++"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Muscles",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Absent",
+                    "Trace",
+                    "+",
+                    "++",
+                    "+++",
+                    "++++"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Vegetables",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Absent",
+                    "Trace",
+                    "+",
+                    "++",
+                    "+++",
+                    "++++"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Ova",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Not Detected",
+                    "Anclystoma Duodenale (Few)",
+                    "Anclystoma Duodenale +",
+                    "Anclystoma Duodenale ++",
+                    "Anclystoma Duodenale +++",
+                    "Anclystoma Duodenale ++++",
+                    "Ascaris Lumbricoides (Few)",
+                    "Ascaris Lumbricoides +",
+                    "Ascaris Lumbricoides ++",
+                    "Ascaris Lumbricoides +++",
+                    "Ascaris Lumbricoides ++++",
+                    "Diphyllobothrium Latum (Few)",
+                    "Diphyllobothrium Latum +",
+                    "Diphyllobothrium Latum ++",
+                    "Diphyllobothrium Latum +++",
+                    "Diphyllobothrium Latum ++++",
+                    "Dipylidium Caninum (Few)",
+                    "Dipylidium Caninum +",
+                    "Dipylidium Caninum ++",
+                    "Dipylidium Caninum +++",
+                    "Dipylidium Caninum ++++",
+                    "Enterobius Vermicularis (Few)",
+                    "Enterobius Vermicularis +",
+                    "Enterobius Vermicularis ++",
+                    "Enterobius Vermicularis +++",
+                    "Enterobius Vermicularis ++++",
+                    "Fasciola (Few)",
+                    "Fasciola +",
+                    "Fasciola ++",
+                    "Fasciola +++",
+                    "Fasciola ++++",
+                    "Helerophyes Helerophyes (Few)",
+                    "Helerophyes Helerophyes +",
+                    "Helerophyes Helerophyes ++",
+                    "Helerophyes Helerophyes +++",
+                    "Helerophyes Helerophyes ++++",
+                    "Hymenolepis Nana (Few)",
+                    "Hymenolepis Nana +",
+                    "Hymenolepis Nana ++",
+                    "Hymenolepis Nana +++",
+                    "Hymenolepis Nana ++++",
+                    "schistosoma Heamatobium (Few)",
+                    "schistosoma Heamatobium +",
+                    "schistosoma Heamatobium ++",
+                    "schistosoma Heamatobium +++",
+                    "schistosoma Heamatobium ++++",
+                    "schistosoma Mansoni (Few)",
+                    "schistosoma Mansoni +",
+                    "schistosoma Mansoni ++",
+                    "schistosoma Mansoni +++",
+                    "schistosoma Mansoni ++++",
+                    "strongyloides (Few)",
+                    "strongyloides +",
+                    "strongyloides ++",
+                    "strongyloides +++",
+                    "strongyloides ++++",
+                    "Taenia (Few0",
+                    "Taenia +",
+                    "Taenia ++",
+                    "Taenia +++",
+                    "Taenia ++++"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Not Detect"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Trophozoite",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Absent",
+                    "Endolimax Nana",
+                    "Endolimax Nana (Few)",
+                    "Endolimax Nana +",
+                    "Endolimax Nana ++",
+                    "Endolimax Nana +++",
+                    "Endolimax Nana ++++",
+                    "Entamoeba Coli",
+                    "Entamoeba Coli (Few)",
+                    "Entamoeba Coli +",
+                    "Entamoeba Coli ++",
+                    "Entamoeba Coli +++",
+                    "Entamoeba Coli ++++",
+                    "Entamoeba Histolytica",
+                    "Entamoeba Histolytica (Few)",
+                    "Entamoeba Histolytica +",
+                    "Entamoeba Histolytica ++",
+                    "Entamoeba Histolytica +++",
+                    "Entamoeba Histolytica ++++",
+                    "Giardia Lamblia",
+                    "Giardia Lamblia (Few)",
+                    "Giardia Lamblia +",
+                    "Giardia Lamblia ++",
+                    "Giardia Lamblia +++",
+                    "Giardia Lamblia ++++",
+                    "Iodamoeba Butschlii",
+                    "Iodamoeba Butschlii (Few)",
+                    "Iodamoeba Butschlii +",
+                    "Iodamoeba Butschlii ++",
+                    "Iodamoeba Butschlii +++",
+                    "Iodamoeba Butschlii ++++"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Cysts",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Absent",
+                    "Balantidium Coli (Few)",
+                    "Balantidium Coli +",
+                    "Balantidium Coli ++",
+                    "Balantidium Coli +++",
+                    "Balantidium Coli ++++",
+                    "Endolimax Nana (Few)",
+                    "Endolimax Nana +",
+                    "Endolimax Nana ++",
+                    "Endolimax Nana +++",
+                    "Endolimax Nana ++++",
+                    "Entamoeba Coli (Few)",
+                    "Entamoeba Coli +",
+                    "Entamoeba Coli ++",
+                    "Entamoeba Coli +++",
+                    "Entamoeba Coli ++++",
+                    "Entamoeba Histolytica (Few)",
+                    "Entamoeba Histolytica +",
+                    "Entamoeba Histolytica ++",
+                    "Entamoeba Histolytica +++",
+                    "Entamoeba Histolytica ++++",
+                    "Giardia Lamblia (Few)",
+                    "Giardia Lamblia +",
+                    "Giardia Lamblia ++",
+                    "Giardia Lamblia +++",
+                    "Giardia Lamblia ++++",
+                    "Hydatid (Few)",
+                    "Hydatid +",
+                    "Hydatid ++",
+                    "Hydatid +++",
+                    "Hydatid ++++",
+                    "Iodamoeba Butschlii (Few)",
+                    "Iodamoeba Butschlii +",
+                    "Iodamoeba Butschlii ++",
+                    "Iodamoeba Butschlii +++",
+                    "Iodamoeba Butschlii ++++"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Larva",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Absent",
+                    "Anclystoma Duodenale (Few)",
+                    "Anclystoma Duodenale +",
+                    "Anclystoma Duodenale ++",
+                    "Anclystoma Duodenale +++",
+                    "Anclystoma Duodenale ++++",
+                    "Ascaris Lumbricoides (Few)",
+                    "Ascaris Lumbricoides +",
+                    "Ascaris Lumbricoides ++",
+                    "Ascaris Lumbricoides +++",
+                    "Ascaris Lumbricoides ++++",
+                    "Enterobius Vermicularis (Few)",
+                    "Enterobius Vermicularis +",
+                    "Enterobius Vermicularis ++",
+                    "Enterobius Vermicularis +++",
+                    "Enterobius Vermicularis ++++",
+                    "strongyloides Strcoralis (Few)",
+                    "strongyloides Strcoralis +",
+                    "strongyloides Strcoralis ++",
+                    "strongyloides Strcoralis +++",
+                    "strongyloides Strcoralis ++++",
+                    "Trichinem Spiralis (Few)",
+                    "Trichinem Spiralis +",
+                    "Trichinem Spiralis ++",
+                    "Trichinem Spiralis +++",
+                    "Trichinem Spiralis ++++"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            },
+            {
+                "name": "Others",
+                "type": "Microscopic Examination",
+                "unit": "",
+                "result": "result",
+                "options": [
+                    "Absent",
+                    "Monillia ( Few )",
+                    "Monillia ( + )",
+                    "Monillia ( + + )",
+                    "Monillia ( + + + )",
+                    "Monillia ( + + + + )",
+                    "Bacteria ( Few )",
+                    "Bacteria ( + )",
+                    "Bacteria ( + + )",
+                    "Bacteria ( + + + )",
+                    "Bacteria ( + + + + )"
+                ],
+                "shortcut": "",
+                "reference": [
+                    {
+                        "kit": "",
+                        "note": "",
+                        "unit": "",
+                        "range": [
+                            {
+                                "low": "Absent"
+                            }
+                        ],
+                        "gender": "كلاهما",
+                        "age low": "0",
+                        "age high": "100",
+                        "age unit low": "عام",
+                        "age unit high": "عام"
+                    }
+                ]
+            }
+        ]
+    }
+}

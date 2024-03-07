@@ -1,0 +1,617 @@
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #d4cabb;
+}
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+/* Navbar section */
+nav {
+  background-color: #333;
+  padding: 20px;
+  direction: rtl;
+  position: sticky;
+  top: 0; /* Stick the navbar to the top of the viewport */
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+nav ul {
+  list-style-type: none; /* Remove default bullet points */
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline; /* Display list items horizontally */
+  font-size: 20px;
+}
+
+nav ul li a {
+  display: inline-block;
+  padding: 10px 20px; /* Add padding to each link */
+  color: #fff; /* Set the text color of links */
+  text-decoration: none; /* Remove underline from links */
+}
+
+nav ul li a:hover {
+  background-color: #555; /* Change background color on hover */
+}
+
+/* header option  ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+.header {
+  height: 51mm;
+  background-image: url("../image/header.webp");
+  background-repeat: no-repeat;
+  background-size: 210mm 51mm;
+}
+
+/* center option  ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+.center {
+  height: 185mm;
+  /* background-image: url(../image/center.webp); */
+  background-repeat: no-repeat;
+  background-size: 210mm 227.3mm;
+  padding-left: 45px;
+  padding-right: 45px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+.center h1 {
+  text-align: center;
+  font-family: Cairo;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/* informations option  ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+.informations {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.navr {
+  width: 74.7%;
+}
+
+.navl {
+  width: 25%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: 100%;
+  border: 1px solid #2a2f45;
+  /* border-radius: 4px; */
+  margin: 2px;
+}
+
+.row p {
+  display: block;
+  margin-block-start: 1px;
+  margin-block-end: 1px;
+  margin-inline-start: 1px;
+  margin-inline-end: 1px;
+}
+
+.cell1 {
+  padding-left: 6px;
+  border-right: 5px solid #432e21;
+  width: 20%;
+  text-align: center;
+  font-family: Cairo;
+  /* font-weight: bold; */
+  font-size: 12px;
+  color: white;
+  background-color: #aa8c62;
+}
+
+.cell2 {
+  margin-right: 10px;
+  width: 75%;
+  text-align: right;
+  font-family: Cairo;
+  font-size: 12px;
+}
+
+.navl .cell1 {
+  width: 50%;
+  padding-left: 0px;
+  text-align: center;
+}
+
+.navl .cell2 {
+  width: 50%;
+  text-align: center;
+  margin-right: 0px;
+}
+
+.navc {
+  width: 100%;
+  border-radius: 4px;
+  margin-top: -2px;
+}
+
+.navc p {
+  display: block;
+  margin-block-start: 1px;
+  margin-block-end: 1px;
+  margin-inline-start: 1px;
+  margin-inline-end: 1px;
+}
+
+.navc .cell1 {
+  padding-left: 5px;
+  width: 15.3%;
+  text-align: center;
+}
+
+.navc .cell2 {
+  margin-right: 10px;
+  width: 85%;
+  text-align: right;
+}
+
+/* list option  ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+.list {
+  width: 100%;
+  padding-top: 5px;
+  padding-bottom: 1px;
+  font-family: Cairo;
+  font-weight: bold;
+  font-size: 12px;
+  text-align: center;
+}
+
+.list .row {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: 100%;
+  border-top: 1px solid #2a2f45;
+  border-right: 1px solid #2a2f45;
+  border-left: 1px solid #2a2f45;
+  border-bottom: 0px solid #2a2f45;
+  border-radius: 0px;
+  margin: 2px;
+}
+
+.list .cell0 {
+  padding-left: 0px;
+  border-left: 0px;
+  width: 3.5%;
+  text-align: center;
+  border-bottom: 5px solid #432f21;
+  margin-left: 2px;
+}
+
+.list .cell2 {
+  margin-right: 0px;
+  border-left: 0px;
+  width: 45%;
+  text-align: right;
+  border-bottom: 5px solid #a98d64;
+  margin-left: 2px;
+  padding-right: 5px;
+}
+
+.list .cell3 {
+  border-left: 0px;
+  width: 7%;
+  text-align: center;
+  border-bottom: 5px solid #432f21;
+  margin-left: 2px;
+}
+
+.list .cell4 {
+  border-left: 0px;
+  width: 7%;
+  text-align: center;
+  border-bottom: 5px solid #aa8c62;
+  margin-left: 2px;
+}
+
+.list .cell5 {
+  border-left: 0px;
+  width: 8%;
+  text-align: center;
+  border-bottom: 5px solid #432f21;
+  margin-left: 2px;
+}
+
+.list .cell6 {
+  border-left: 0px;
+  width: 15%;
+  text-align: center;
+  border-bottom: 5px solid #a98d64;
+  margin-left: 2px;
+}
+
+.list .cell7 {
+  border-left: 0px;
+  width: 15%;
+  text-align: center;
+  border-bottom: 5px solid #432f21;
+  margin-left: 0px;
+}
+
+.listinfo {
+  width: 100%;
+  font-size: 12px;
+  text-align: center;
+  margin-left: 2px;
+  margin-top: -3px;
+  border-right: 1px solid #2a2f45;
+  border-left: 1px solid #2a2f45;
+  border-bottom: 1px solid #2a2f45;
+  height: 558px;
+}
+
+.listinfo .row {
+  display: flex;
+  align-items: stretch;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: 100%;
+  border-top: 0px solid #ccc;
+  border-right: 0px solid #2a2f45;
+  border-left: 0px solid #2a2f45;
+  padding-bottom: 2px;
+  margin-top: 0px;
+  margin-right: 2px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  border-bottom: 0px dotted #b7b5b5;
+}
+
+.listinfo .cell0 {
+  padding-left: 0px;
+  border-left: 0px;
+  width: 3.7%;
+  text-align: center;
+  font-family: "Cairo";
+  border-bottom: 1px dotted #b7b5b5;
+  margin-left: 2px;
+}
+
+.listinfo .cell2 {
+  margin-right: 0px;
+  border-left: 0px;
+  width: 45%;
+  text-align: right;
+  font-family: Cairo;
+  padding-right: 5px;
+  border-bottom: 1px dotted #b7b5b5;
+  margin-left: 2px;
+}
+
+.listinfo .cell3 {
+  border-left: 0px;
+  width: 7%;
+  text-align: center;
+  font-family: Cairo;
+  border-bottom: 1px dotted #b7b5b5;
+  margin-left: 2px;
+}
+
+.listinfo .cell4 {
+  border-left: 0px;
+  width: 7%;
+  text-align: center;
+  font-family: "Cairo";
+  border-bottom: 1px dotted #b7b5b5;
+  margin-left: 2px;
+}
+
+.listinfo .cell5 {
+  border-left: 0px;
+  width: 8%;
+  text-align: center;
+  font-family: "Cairo";
+  border-bottom: 1px dotted #b7b5b5;
+  margin-left: 2px;
+}
+
+.listinfo .cell6 {
+  border-left: 0px;
+  width: 15%;
+  text-align: center;
+  font-family: "Cairo";
+  border-bottom: 1px dotted #b7b5b5;
+  margin-left: 2px;
+}
+
+.listinfo .cell7 {
+  border-left: 0px;
+  width: 15%;
+  text-align: center;
+  font-family: Cairo;
+  border-bottom: 1px dotted #b7b5b5;
+}
+
+/* footer option  ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+.footer {
+  height: 60.4mm;
+  background-image: url("../image/foot.webp");
+  background-repeat: no-repeat;
+  background-size: 210mm 60.4mm;
+  padding-left: 45px;
+  padding-right: 45px;
+  margin-top: 2px;
+}
+
+.price {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.price .navr {
+  width: 64.4%;
+  margin-left: 2px;
+}
+
+.price .navl {
+  width: 35.2%;
+}
+
+.price .navr .row {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  height: 143px;
+  padding: 5px;
+}
+
+.price .navr .row .note {
+  padding-left: 6px;
+  text-align: right;
+  font-family: Cairo;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.price .navc1,
+.navc2 {
+  width: 49.85%;
+  margin-top: -1px;
+}
+
+.price .navc .row {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 2px;
+}
+
+.price .navc1 .row .cell1,
+.navc2 .row .cell1 {
+  width: 25%;
+}
+
+.price .navc2 .row .cell2,
+.navc2 .row .cell2 {
+  width: 70%;
+}
+
+/* font ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Cairo";
+  src: url("../fonts/play-v17-latin-regular.eot");
+  src: local("â˜º"), url("../fonts/play-v17-latin-regular.woff") format("woff"),
+    url("../fonts/play-v17-latin-regular.svg") format("svg");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Al-Jazeera-Arabic;
+  src: url("../fonts/al-jazeera-arabic-bold.eot");
+  src: local("â˜º"), url("../fonts/al-jazeera-arabic-bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Cairo";
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/cairo/v20/SLXVc1nY6HkvangtZmpcWmhzfH5lWWgcQyyS4J0.woff2)
+    format("woff2");
+  unicode-range: U+0600-06FF, U+200C-200E, U+2010-2011, U+204F, U+2E41,
+    U+FB50-FDFF, U+FE80-FEFC;
+}
+
+/* cairo-regular - latin */
+@font-face {
+  font-family: "Cairo";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/cairo-v20-latin-regular.eot"); /* IE9 Compat Modes */
+  src: local(""),
+    url("../fonts/cairo-v20-latin-regular.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("../fonts/cairo-v20-latin-regular.woff2") format("woff2"),
+    /* Super Modern Browsers */ url("../fonts/cairo-v20-latin-regular.woff")
+      format("woff"),
+    /* Modern Browsers */ url("../fonts/cairo-v20-latin-regular.ttf")
+      format("truetype"),
+    /* Safari, Android, iOS */ url("../fonts/cairo-v20-latin-regular.svg#Cairo")
+      format("svg"); /* Legacy iOS */
+}
+
+/* page option ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 10mm auto;
+  border: 1px #d3d3d3 solid;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+  background: #181818;
+  color: #fff;
+  position: absolute;
+  top: -250px;
+  left: 0;
+  width: 100%;
+  height: 250px;
+  padding: 20px;
+  transition: top 300ms cubic-bezier(0.17, 0.04, 0.03, 0.94);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.message h1 {
+  color: #fff;
+}
+
+#toggle {
+  position: absolute;
+  appearance: none;
+  cursor: pointer;
+  left: -100%;
+  top: -100%;
+}
+
+#toggle + label {
+  position: absolute;
+  cursor: pointer;
+  padding: 10px;
+  background: #26ae90;
+  width: 100px;
+  border-radius: 3px;
+  padding: 8px 10px;
+  color: #fff;
+  line-height: 20px;
+  font-size: 12px;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+  cursor: pointer;
+  margin: 20px 50px;
+  transition: all 500ms ease;
+}
+#toggle + label:after {
+  content: "Option";
+}
+
+.container {
+  transition: margin 300ms cubic-bezier(0.17, 0.04, 0.03, 0.94);
+  padding: 1em 1em;
+}
+
+#toggle:checked ~ .message {
+  top: 0;
+}
+
+#toggle:checked ~ .container {
+  margin-top: 250px;
+}
+
+#toggle:checked + label {
+  background: #dd6149;
+}
+
+#toggle:checked + label:after {
+  content: "Close";
+}
+
+/* print option ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+@media print {
+  html,
+  body {
+    /* width: 210mm;
+    height: 297mm; */
+  }
+  .page {
+    margin: 0;
+    border: initial;
+    border-radius: initial;
+    width: initial;
+    min-height: initial;
+    box-shadow: initial;
+    background: always;
+    page-break-after: always;
+  }
+  /* .header {
+    display: none;
+  } */
+
+  .message {
+    display: none;
+  }
+
+  #toggle {
+    display: none;
+  }
+
+  .container {
+    display: none;
+  }
+
+  #toggle + label {
+    display: none;
+  }
+  nav {
+    display: none;
+  }
+}
+#save button {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+#save button:hover {
+  background-color: #45a049; /* Darker Green */
+}
