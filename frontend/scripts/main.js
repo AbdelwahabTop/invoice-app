@@ -4,13 +4,18 @@ document.getElementById("print").addEventListener("click", function () {
   console.log("print");
 });
 
+const BASE_URL = "http://localhost/files/backend/";
+const CUSTOMER_NAME = document.getElementById("NAME");
+const CUSTOMER_ADDRESS = document.getElementById("ADDRESS");
+const CUSTOMER_PHONE = document.getElementById("PHONE");
+const INVOICE_NUM = document.getElementById("INV-NUM");
+const INVOICE_DATE = document.getElementById("datepicker");
+
 function createNewPage(num) {
-  // const clientName = document.querySelector(".row .clientName").innerHTML;
-  const address = document.querySelector(".row .clientAddress").innerHTML;
-  const clientDate = document.querySelector(".row .clientDate").innerHTML;
   var newPage = document.createElement("div");
   newPage.classList.add("page");
   newPage.id = `page${num}`;
+
   newPage.innerHTML = `
   <!-- صفحة يمكنك تكرارها ------------------------------------------------------------------------------->
 
@@ -28,8 +33,8 @@ function createNewPage(num) {
         </div>
         <!-- | -->
         <div class="name-num">
-          <input type="text" class="cell2 clientName auto-inp-${num}" placeholder="....أكتب اسم العميل الثلاثي" />
-          <input type="text" class="clientPhone" placeholder="أدخل رثم الهاتف..." />
+          <input readonly value="${CUSTOMER_NAME.value}" type="text" class="cell2 clientName auto-name" placeholder="....أكتب اسم العميل الثلاثي" />
+          <input readonly value="${CUSTOMER_PHONE.value}" type="text" class="clientPhone auto-phone" placeholder="أدخل رقم الهاتف..." />
         </div>
       </div>
 
@@ -38,8 +43,9 @@ function createNewPage(num) {
           <p>العنوان</p>
         </div>
         <!-- | -->
-        <div contenteditable="true" class="cell2 clientAddress">
-          <p>&nbsp;</p>
+        <div  class="cell2 clientAddress auto-address">
+          
+          <p>${CUSTOMER_ADDRESS.innerText}</p>
         </div>
       </div>
     </div>
@@ -47,21 +53,22 @@ function createNewPage(num) {
       <div class="navl">
         <!-- معلومات القائمة ------------------------------------------------------->
         <div class="row">
-          <div class="cell1"><p>رقم القائمة</p></div>
+          <div class="cell1">
+            <p>رقم القائمة</p>
+          </div>
           <!-- | -->
-          <div class="cell2"><p>00${Math.floor(
-            Math.random() * 100000
-          )}</p></div>
+          <div class="cell2 invoiceNumber auto-invoice-num">
+            <p>${INVOICE_NUM.innerText}</p>
+          </div>
         </div>
 
         <div class="row">
           <div class="cell1"><p>التاريخ</p></div>
           <!-- | -->
-          <div contenteditable="true" class="cell2"><p>${clientDate}</p></div>
+          <div class="cell2 auto-date"><p>${INVOICE_DATE.value}</p></div>
         </div>
       </div>
     </div>
-    <ul id="autocompleteResults" class="autocomplete-results auto-results-${num}"></ul>
 
 
     <div class="list">
@@ -102,11 +109,11 @@ function createNewPage(num) {
         <div class="row">
           <div class="cell1"><p>مجموع القائمة</p></div>
           <!-- | -->
-          <div class="cell2"><p>&nbsp;</p></div>
+          <div id="tot-${num}-tot" class="cell2 total"><p>&nbsp;</p></div>
         </div>
 
         <div class="row">
-          <div class="cell1"><p>الخصم</p></div>
+          <div class="cell1 discount"><p>الخصم</p></div>
           <!-- | -->
           <div contenteditable="true" class="cell2"><input type="text" /></div>
         </div>
@@ -114,7 +121,7 @@ function createNewPage(num) {
         <div class="row">
           <div class="cell1"><p>الحساب بعد الخصم</p></div>
           <!-- | -->
-          <div class="cell2"><p>&nbsp;</p></div>
+          <div class="cell2 after-discount"><p>&nbsp;</p></div>
         </div>
 
         <div class="row">
@@ -136,9 +143,43 @@ function createNewPage(num) {
   currentPage = newPage;
   currentItemCount = 0;
 
-  const customerNameInput = document.querySelector(`.auto-inp-${num}`);
-  const autocompleteResults = document.querySelector(`.auto-results-${num}`);
-  setupCustomerAutocomplete(customerNameInput, autocompleteResults);
+  autoFillCusData();
+  calcTotal();
+  discount();
+}
+
+///////// ملئ البيانات تلقائيا للمستخدم في الصفحات الجديدة //////////
+function autoFillCusData() {
+  const cusAutoName = document.querySelectorAll(`.auto-name`);
+  const cusAutoPhone = document.querySelectorAll(`.auto-phone`);
+  const cusAutoAddress = document.querySelectorAll(`.auto-address`);
+  const invAutoNum = document.querySelectorAll(`.auto-invoice-num`);
+  const invAutoDate = document.querySelectorAll(`.auto-date`);
+  CUSTOMER_NAME.addEventListener("input", function () {
+    cusAutoName.forEach((ele) => {
+      ele.value = this.value;
+    });
+  });
+  CUSTOMER_PHONE.addEventListener("input", function () {
+    cusAutoPhone.forEach((ele) => {
+      ele.value = this.value;
+    });
+  });
+  CUSTOMER_ADDRESS.addEventListener("input", function () {
+    cusAutoAddress.forEach((ele) => {
+      ele.innerText = this.innerText;
+    });
+  });
+  INVOICE_NUM.addEventListener("input", function () {
+    invAutoNum.forEach((ele) => {
+      ele.innerText = this.innerText;
+    });
+  });
+  INVOICE_DATE.addEventListener("input", function () {
+    invAutoDate.forEach((ele) => {
+      ele.innerText = this.value;
+    });
+  });
 }
 
 document.getElementById("create").addEventListener("click", function () {
@@ -154,26 +195,6 @@ var currentPage = document.querySelector(".book .page");
 var elePerPage = [1];
 var containerID = "#page";
 
-// function generateItemRow(colNum) {
-//   let content = `<div class="row item-row">
-//     <div class="cell0"><p>${colNum}</p></div>
-//     <div class="cell2">
-//     <input type="text" class="itemNameInput" placeholder="...أكتب اسم السلعة" name="itemName${colNum}">
-//     <div class="itemAutocomplete"></div>
-//   </div>
-//     <div contenteditable="true" class="cell3"><p>99</p></div>
-//     <div contenteditable="true" class="cell4"><p>100</p></div>
-//     <div contenteditable="true" class="cell5">
-//       <p class="c1">3000</p>
-//     </div>
-//     <div contenteditable="true" class="cell6">
-//       <p class="c1">28.35.000</p>
-//     </div>
-//     <div contenteditable="true" class="cell7"><p>28.35.000</p></div>
-//   </div>`;
-
-//   return content;
-// }
 function getElementByXpath(path, parent) {
   return document.evaluate(
     path,
@@ -254,18 +275,96 @@ document.getElementById("reset").addEventListener("click", function () {
   console.log("reset");
 });
 
+/////////////////////////////////////////////////////
+const invTotalSec = document.querySelectorAll(".total");
+const lastTotal = invTotalSec[invTotalSec.length - 1];
+
 const calcTotal = () => {
   let total = 0;
   for (let i = 0; i < elePerPage.length; i++) {
     const rowsItems = document
       .querySelector(containerID + i)
-      .querySelectorAll(".item-row .cell7 p");
+      .querySelectorAll(".item-row .cell7");
     rowsItems.forEach((item) => {
-      total += parseFloat(item.innerHTML);
+      total += parseFloat(item.innerText.replace(/,/g, ""));
     });
   }
+  invTotalSec.forEach((ele) => {
+    ele.innerText = " ";
+  });
+  lastTotal.innerText = total;
+  // console.log(total);
   return total;
 };
+
+const discount = () => {
+  const discountEles = document.querySelectorAll(".discount");
+  const afterDiscountEles = document.querySelectorAll(".after-discount");
+  discountEles.forEach((ele) => {
+    ele.innerText = " ";
+  });
+  afterDiscountEles.forEach((ele) => {
+    ele.innerText = " ";
+  });
+  const lastDiscount = discountEles[discountEles.length - 1];
+  const lastAfterDiscount = afterDiscountEles[afterDiscountEles.length - 1];
+
+  lastDiscount.addEventListener("input", (e) => {
+    const total = calcTotal();
+    console.log(lastDiscount.innerText);
+    if (total >= parseFloat(lastDiscount.innerText)) {
+      const afterDiscount = total - lastDiscount.innerText;
+      console.log(afterDiscount);
+      lastAfterDiscount.innerText = afterDiscount;
+    } else if (total < parseFloat(lastDiscount.innerText)) {
+      lastAfterDiscount.innerText = "الخصم اكبر من المجموع";
+    } else {
+      lastAfterDiscount.innerText = lastDiscount.innerText;
+    }
+  });
+  // console.log("discount");
+};
+
+function attachRealTimeCalculations(itemRow) {
+  const qtyInput = itemRow.querySelector(".qty");
+  const cmInput = itemRow.querySelector(".cm");
+  const meterInput = itemRow.querySelector(".meter");
+  const priceInput = itemRow.querySelector(".price");
+  const totalPriceDisplay = itemRow.querySelector(".total-price");
+
+  [qtyInput, cmInput, meterInput, priceInput].forEach((input) => {
+    input.addEventListener("input", () => {
+      const qty = parseInt(qtyInput.innerText);
+      const cm = parseInt(cmInput.innerText);
+      const meter = parseInt(meterInput.innerText);
+      const price = parseFloat(priceInput.innerText);
+
+      // Check if all inputs are valid numbers
+      if (!isNaN(qty) && !isNaN(cm) && !isNaN(meter) && !isNaN(price)) {
+        let totalCm = cm;
+        let totalMeter = meter;
+
+        if (totalCm >= 100) {
+          totalMeter += Math.floor(totalCm / 100);
+          totalCm %= 100;
+        }
+
+        let meterCmString = totalMeter.toString();
+        if (totalCm > 0) {
+          meterCmString += "." + totalCm.toString().padStart(2, "0");
+        }
+
+        const totalPrice = qty * parseFloat(meterCmString) * price;
+        totalPriceDisplay.innerText = totalPrice;
+        calcTotal();
+      } else {
+        totalPriceDisplay.innerText = "Invalid";
+      }
+    });
+  });
+}
+const itemRow = document.querySelector(".item-row");
+attachRealTimeCalculations(itemRow);
 
 // this listner is reponsable of adding the price cut and change the total after but
 function applyListnerOnCut(pageNum) {
@@ -297,7 +396,7 @@ function handelDomChange(pageNum) {
   );
   afterSalecut.innerHTML = parseFloat(total) - valueOfInput;
 }
-// reset all values to zero in the last ele
+//////////////// reset all values to zero in the last ele
 function clearLast(pageNum) {
   let ele = getElementByXpath(
     `/html/body/div/div[@id="page${pageNum}"]/div[3]/div/div[2]/div[2]/div[2]/input`,
@@ -318,15 +417,10 @@ function clearLast(pageNum) {
   applyListnerOnCut;
 }
 applyListnerOnCut(0);
-
+//////////////////////////////////////////////////////////////////////
 // Save the invoice data, client details and items to the database
 const saveBTN = document.getElementById("save");
 saveBTN.addEventListener("click", async () => {
-  const customer_name = document.querySelector(".clientName").value;
-  const customer_address = document.querySelector(".clientAddress").innerText;
-  const customer_phone = document.querySelector(".clientPhone").innerText;
-  const invoice_number = document.querySelector(".invoiceNumber").innerText;
-  const invoice_date = document.querySelector(".clientDate").innerText;
   const itemRows = document.querySelectorAll(".item-row");
   const items = [];
 
@@ -359,26 +453,27 @@ saveBTN.addEventListener("click", async () => {
   });
 
   const Data = {
-    customer_name,
-    customer_address,
-    customer_phone,
-    invoice_number,
-    invoice_date,
+    customer_name: CUSTOMER_NAME.value,
+    customer_address: CUSTOMER_ADDRESS.innerText,
+    customer_phone: CUSTOMER_PHONE.value,
+    invoice_number: INVOICE_NUM.innerText,
+    invoice_date: INVOICE_DATE.value,
     items,
   };
 
   console.log(Data);
   await axios
-    .post("http://localhost/files/backend/post", JSON.stringify(Data))
+    .post(`${BASE_URL}post`, JSON.stringify(Data))
     .then((response) => {
-      console.log(response.data); // Handle response if needed
+      console.log(response.data);
+      getLastInvoiceNumber();
     })
     .catch((error) => {
       console.error("Error:", error);
     });
 });
 
-// Autocomplete customer name //////////////////////////////////////
+/////////// Autocomplete customer name //////////////////////////////////////
 const customerNameInput = document.querySelectorAll(".clientName");
 const autocompleteResults = document.querySelectorAll(".autocomplete-results");
 
@@ -387,12 +482,12 @@ setupCustomerAutocomplete(customerNameInput[0], autocompleteResults[0]);
 function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
   customerNameInput.addEventListener("input", function () {
     const query = this.value.trim();
-    console.log(query);
+
     if (query.length === 0) {
       autocompleteResults.innerHTML = "";
       return;
     }
-    fetch(`http://localhost/files/backend/get_client/?query=${query}`)
+    fetch(`${BASE_URL}get_client/?query=${query}`)
       .then((response) => response.json())
       .then((data) => {
         const results = data.results;
@@ -426,7 +521,6 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
     }
   });
 }
-
 ////////////////////////////////////////////////////////////////////////
 // Dynamic Date
 const currentDate = new Date();
@@ -434,7 +528,30 @@ const year = currentDate.getFullYear();
 const month = String(currentDate.getMonth() + 1).padStart(2, "0");
 const day = String(currentDate.getDate()).padStart(2, "0");
 const dynamicDateString = `${year}/${month}/${day}`;
-document.getElementById("dynamicDate").innerText = dynamicDateString;
+document.getElementById("datepicker").value = dynamicDateString;
+$(function () {
+  // Get current date
+  var currentDate = new Date();
+
+  $("#datepicker").datepicker({
+    dateFormat: "yy/mm/dd",
+    defaultDate: currentDate,
+    onSelect: function (date) {},
+  });
+});
+////////////// Get last inserted invoice number ///////////////////////////////////////
+function getLastInvoiceNumber() {
+  fetch(`${BASE_URL}get_last_invoice`)
+    .then((response) => response.json())
+    .then((data) => {
+      const lastInvoiceNumber = data.last_invoice;
+      invoiceNumberElements = document.querySelectorAll(".invoiceNumber");
+      invoiceNumberElements.forEach((element) => {
+        element.innerText = parseInt(lastInvoiceNumber) + 1;
+      });
+    });
+}
+getLastInvoiceNumber();
 ////////////////////////////////////////////////////////////////////////
 // Function to find the last inserted item price for a specific item name
 function getLastInsertedItemPrice(itemsArray, itemName) {
@@ -470,7 +587,7 @@ function attachAutocompleteListener(
       return;
     }
 
-    fetch(`http://localhost/files/backend/get_items/?query=${query}`)
+    fetch(`${BASE_URL}get_items/?query=${query}`)
       .then((response) => response.json())
       .then((data) => {
         const items = data.items;
@@ -517,15 +634,15 @@ function generateItemRow(colNum) {
     <input type="text" class="itemNameInput" placeholder="...أكتب اسم السلعة">
   </div>
   <ul class="itemAutocomplete"></ul>
-    <div contenteditable="true" class="cell3"><p>99</p></div>
-    <div contenteditable="true" class="cell4"><p>100</p></div>
-    <div contenteditable="true" class="cell5">
-      <p class="c1">3000</p>
+    <div contenteditable="true" class="cell3 qty"><p>1</p></div>
+    <div contenteditable="true" class="cell4 cm"><p>00</p></div>
+    <div contenteditable="true" class="cell5 meter">
+      <p class="c1">00</p>
     </div>
-    <div contenteditable="true" class="cell6">
-      <p class="c1">28.35.000</p>
+    <div contenteditable="true" class="cell6 price">
+      <p class="c1">00.00</p>
     </div>
-    <div contenteditable="true" class="cell7"><p>28.35.000</p></div>
+    <div class="cell7 total-price"><p>00.00</p></div>
   </div>`;
 
   // Create a temporary div element to attach the new row
@@ -542,6 +659,9 @@ function generateItemRow(colNum) {
     newItemAutocomplete,
     newItemPrice
   );
+  // Attach real-time calculations to the new row
+  attachRealTimeCalculations(newItemRow);
 
   return newItemRow;
 }
+discount();

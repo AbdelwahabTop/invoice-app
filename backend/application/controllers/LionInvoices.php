@@ -27,6 +27,13 @@ class LionInvoices extends CI_Controller
         return json_encode($items);
     }
 
+    public function getLastInvoice()
+    {
+        $last_invoice = $this->InvoiceModel->getLastInvoice();
+        echo json_encode(['last_invoice' => $last_invoice]);
+        return json_encode($last_invoice);
+    }
+
     public function insert()
     {
         $data = json_decode(file_get_contents('php://input'), true);

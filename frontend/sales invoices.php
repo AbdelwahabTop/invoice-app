@@ -5,6 +5,11 @@
   <meta charset="UTF-8">
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
 </head>
 
 <body>
@@ -35,8 +40,8 @@
               </div>
               <!-- | -->
               <div class="name-num">
-                <input type="text" class="cell2 clientName" placeholder="....أكتب اسم العميل الثلاثي" />
-                <input type="text" class="clientPhone" placeholder="أدخل رثم الهاتف..." />
+                <input type="text" id="NAME" class="cell2 clientName" placeholder="....أكتب اسم العميل الثلاثي" />
+                <input type="text" id="PHONE" class="clientPhone" placeholder="أدخل رقم الهاتف..." />
               </div>
             </div>
 
@@ -45,7 +50,7 @@
                 <p>العنوان</p>
               </div>
               <!-- | -->
-              <div contenteditable="true" class="cell2 clientAddress">
+              <div contenteditable="true" class="cell2 clientAddress" id="ADDRESS">
                 <p>&nbsp;</p>
               </div>
             </div>
@@ -58,7 +63,7 @@
                 <p>رقم القائمة</p>
               </div>
               <!-- | -->
-              <div contenteditable="true" class="cell2 invoiceNumber">
+              <div contenteditable="true" class="cell2 invoiceNumber" id="INV-NUM">
                 <p>0025548</p>
               </div>
             </div>
@@ -68,9 +73,10 @@
                 <p>التاريخ</p>
               </div>
               <!-- | -->
-              <div contenteditable="true" class="cell2 clientDate">
-                <p id="dynamicDate"></p>
+              <div class="cell2 clientDate">
+                <input type="text" id="datepicker" placeholder="Select Date">
               </div>
+
             </div>
           </div>
         </div>
@@ -110,27 +116,24 @@
             <div class="cell0">
               <p>1</p>
             </div>
-            <!-- <div contenteditable="true" class="cell2">
-              <p>طول قماش قطني بازة درجة رابعة</p>
-            </div> -->
             <div>
               <input type="text" class="itemNameInput" placeholder="...أكتب اسم السلعة">
             </div>
             <ul class="itemAutocomplete"></ul>
-            <div contenteditable="true" class="cell3">
-              <p>99</p>
+            <div contenteditable="true" class="cell3 qty">
+              <p>1</p>
             </div>
-            <div contenteditable="true" class="cell4">
-              <p>100</p>
+            <div contenteditable="true" class="cell4 cm">
+              <p>00</p>
             </div>
-            <div contenteditable="true" class="cell5">
-              <p class="c1">3000</p>
+            <div contenteditable="true" class="cell5 meter">
+              <p class="c1">00</p>
             </div>
-            <div contenteditable="true" class="cell6">
-              <p class="c1">28.35.000</p>
+            <div contenteditable="true" class="cell6 price">
+              <p class="c1">00.00</p>
             </div>
-            <div contenteditable="true" class="cell7">
-              <p>28.35.000</p>
+            <div class="cell7 total-price">
+              <p>00.00</p>
             </div>
           </div>
         </div>
@@ -155,7 +158,7 @@
                 <p>مجموع القائمة</p>
               </div>
               <!-- | -->
-              <div class="cell2">
+              <div class="cell2 total">
                 <p>&nbsp;</p>
               </div>
             </div>
@@ -165,7 +168,7 @@
                 <p>الخصم</p>
               </div>
               <!-- | -->
-              <div contenteditable="true" class="cell2">
+              <div contenteditable="true" class="cell2 discount">
                 <input type="text" />
               </div>
             </div>
@@ -175,7 +178,7 @@
                 <p>الحساب السابق</p>
               </div>
               <!-- | -->
-              <div class="cell2">
+              <div class="cell2 after-discount">
                 <p>&nbsp;</p>
               </div>
             </div>
