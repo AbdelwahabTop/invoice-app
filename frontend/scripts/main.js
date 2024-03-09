@@ -1,7 +1,8 @@
 document.getElementById("print").addEventListener("click", function () {
-  // Code to handle print functionality
   print();
-  console.log("print");
+});
+document.getElementById("reset").addEventListener("click", function () {
+  location.reload();
 });
 
 const BASE_URL = "http://localhost/files/backend/";
@@ -10,7 +11,28 @@ const CUSTOMER_ADDRESS = document.getElementById("ADDRESS");
 const CUSTOMER_PHONE = document.getElementById("PHONE");
 const INVOICE_NUM = document.getElementById("INV-NUM");
 const INVOICE_DATE = document.getElementById("datepicker");
+////////////////////////////////////////////////////////////////////////////
+var discountEles = document.querySelectorAll(".discount");
+var afterDiscountEles = document.querySelectorAll(".after-discount");
+var lastDiscount = discountEles[discountEles.length - 1];
+var lastAfterDiscount = afterDiscountEles[afterDiscountEles.length - 1];
+var invTotalSec = document.querySelectorAll(".total");
+var lastTotal = invTotalSec[invTotalSec.length - 1];
 
+lastDiscount.addEventListener("input", () => {
+  calcTotal();
+});
+
+function reSelectElements() {
+  invTotalSec = document.querySelectorAll(".total");
+  lastTotal = invTotalSec[invTotalSec.length - 1];
+  discountEles = document.querySelectorAll(".discount");
+  afterDiscountEles = document.querySelectorAll(".after-discount");
+  lastDiscount = discountEles[discountEles.length - 1];
+  lastAfterDiscount = afterDiscountEles[afterDiscountEles.length - 1];
+}
+////////////////////////////////////////////////////////////////////////////
+///////////////////////// Create New Page ////////////////////////////////////
 function createNewPage(num) {
   var newPage = document.createElement("div");
   newPage.classList.add("page");
@@ -109,13 +131,13 @@ function createNewPage(num) {
         <div class="row">
           <div class="cell1"><p>مجموع القائمة</p></div>
           <!-- | -->
-          <div id="tot-${num}-tot" class="cell2 total"><p>&nbsp;</p></div>
+          <div class="cell2 total"><p>&nbsp;</p></div>
         </div>
 
         <div class="row">
-          <div class="cell1 discount"><p>الخصم</p></div>
+          <div class="cell1 "><p>الخصم</p></div>
           <!-- | -->
-          <div contenteditable="true" class="cell2"><input type="text" /></div>
+          <div contenteditable="true" class="cell2 discount"><input type="text" /></div>
         </div>
 
         <div class="row">
@@ -142,12 +164,11 @@ function createNewPage(num) {
   document.querySelector(".book").appendChild(newPage);
   currentPage = newPage;
   currentItemCount = 0;
-
+  reSelectElements();
+  resetValues();
   autoFillCusData();
   calcTotal();
-  discount();
 }
-
 ///////// ملئ البيانات تلقائيا للمستخدم في الصفحات الجديدة //////////
 function autoFillCusData() {
   const cusAutoName = document.querySelectorAll(`.auto-name`);
@@ -181,20 +202,56 @@ function autoFillCusData() {
     });
   });
 }
+/////////////// عند انشاء صفحة جديدة تفريغ بيانات السعر والخصم من الصفحات القديمة ووضعه بالصفحة الجديدة //////////
+function resetValues() {
+  discountNum = discountEles[discountEles.length - 2].innerText;
+  invTotalSec.forEach((ele) => {
+    ele.innerText = " ";
+  });
+  discountEles.forEach((ele) => {
+    ele.innerText = " ";
+  });
+  afterDiscountEles.forEach((ele) => {
+    ele.innerText = "";
+  });
+  lastDiscount.innerText = discountNum;
 
+  lastDiscount.addEventListener("input", (e) => {
+    calcTotal();
+  });
+}
+///////////////////////// حساب الاجمالي و بعد الخصم //////////////////////////
+const calcTotal = () => {
+  let total = 0;
+  for (let i = 0; i < elePerPage.length; i++) {
+    const rowsItems = document
+      .querySelector(containerID + i)
+      .querySelectorAll(".item-row .cell7");
+    rowsItems.forEach((item) => {
+      total += parseFloat(item.innerText.replace(/,/g, ""));
+    });
+  }
+  lastTotal.innerText = total.toFixed(2);
+  if (total >= parseFloat(lastDiscount.innerText)) {
+    lastAfterDiscount.innerText =
+      total.toFixed(2) - parseFloat(lastDiscount.innerText).toFixed(2);
+  } else {
+    lastAfterDiscount.innerText = "الخصم كبير او اجعل الخصم صفر";
+  }
+  return total;
+};
 document.getElementById("create").addEventListener("click", function () {
   elePerPage.push(0);
   createNewPage(elePerPage.length - 1);
 });
-
+///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////// Add new item to the list ///////////////////////////////////////
 var currentValue = 2;
 var maximumItemsPerPage = 17;
 var currentItemCount = 0;
 var currentPage = document.querySelector(".book .page");
-
 var elePerPage = [1];
 var containerID = "#page";
-
 function getElementByXpath(path, parent) {
   return document.evaluate(
     path,
@@ -205,40 +262,11 @@ function getElementByXpath(path, parent) {
   ).singleNodeValue;
 }
 
-const changeTotalPerPage = (pageNum) => {
-  document.querySelector(containerID + (elePerPage.length - 1));
-  if (elePerPage.length == 1) {
-    // console.log(document.querySelector(containerID + (elePerPage.length - 1)));
-    const test = getElementByXpath(
-      `/html/body/div/div[@id="page${pageNum}"]/div[3]/div/div[2]/div[1]/div[2]/p`,
-      document
-    );
-
-    test.innerHTML = Math.floor(calcTotal());
-  } else {
-    const lastEle = getElementByXpath(
-      `/html/body/div/div[@id="page${
-        pageNum - 1
-      }"]/div[3]/div/div[2]/div[1]/div[2]/p`,
-      document
-    );
-    lastEle.innerHTML = "";
-    const newEle = getElementByXpath(
-      `/html/body/div/div[@id="page${pageNum}"]/div[3]/div/div[2]/div[1]/div[2]/p`,
-      document
-    );
-    newEle.innerHTML = Math.floor(calcTotal());
-  }
-};
-
 document.getElementById("add").addEventListener("click", function () {
   if (currentPage === null || currentItemCount >= maximumItemsPerPage) {
     elePerPage.push(0);
     createNewPage(elePerPage.length - 1);
-    applyListnerOnCut(elePerPage.length - 1);
-    clearLast(elePerPage.length - 2);
   }
-
   for (let i = 0; i < elePerPage.length; i++) {
     if (elePerPage[i] < maximumItemsPerPage) {
       elePerPage[i]++;
@@ -251,80 +279,46 @@ document.getElementById("add").addEventListener("click", function () {
         return acc + currVal;
       }, 0);
 
-      console.log(elePerPage.length - 1);
-      // parent.innerHTML += generateItemRow(currentCell);
       parent.append(generateItemRow(currentCell));
-      changeTotalPerPage(elePerPage.length - 1);
-      handelDomChange(elePerPage.length - 1);
       break;
     }
   }
-
   currentItemCount++;
-
-  // Check if the current page is full after adding the item
   if (currentItemCount >= maximumItemsPerPage) {
-    // If full, set currentPage to null to trigger creation of a new page on next item addition
     currentPage = null;
   }
 });
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+function calculateRowTotalPrice(itemRow) {
+  const qty = parseInt(itemRow.querySelector(".qty").innerText);
+  const cm = parseInt(itemRow.querySelector(".cm").innerText);
+  const meter = parseInt(itemRow.querySelector(".meter").innerText);
+  const price = parseFloat(itemRow.querySelector(".price").innerText);
+  const totalPriceDisplay = itemRow.querySelector(".total-price");
 
-document.getElementById("reset").addEventListener("click", function () {
-  // Code to handle resetting
-  location.reload();
-  console.log("reset");
-});
+  // Check if all inputs are valid numbers
+  if (!isNaN(qty) && !isNaN(cm) && !isNaN(meter) && !isNaN(price)) {
+    let totalCm = cm;
+    let totalMeter = meter;
 
-/////////////////////////////////////////////////////
-const invTotalSec = document.querySelectorAll(".total");
-const lastTotal = invTotalSec[invTotalSec.length - 1];
-
-const calcTotal = () => {
-  let total = 0;
-  for (let i = 0; i < elePerPage.length; i++) {
-    const rowsItems = document
-      .querySelector(containerID + i)
-      .querySelectorAll(".item-row .cell7");
-    rowsItems.forEach((item) => {
-      total += parseFloat(item.innerText.replace(/,/g, ""));
-    });
-  }
-  invTotalSec.forEach((ele) => {
-    ele.innerText = " ";
-  });
-  lastTotal.innerText = total;
-  // console.log(total);
-  return total;
-};
-
-const discount = () => {
-  const discountEles = document.querySelectorAll(".discount");
-  const afterDiscountEles = document.querySelectorAll(".after-discount");
-  discountEles.forEach((ele) => {
-    ele.innerText = " ";
-  });
-  afterDiscountEles.forEach((ele) => {
-    ele.innerText = " ";
-  });
-  const lastDiscount = discountEles[discountEles.length - 1];
-  const lastAfterDiscount = afterDiscountEles[afterDiscountEles.length - 1];
-
-  lastDiscount.addEventListener("input", (e) => {
-    const total = calcTotal();
-    console.log(lastDiscount.innerText);
-    if (total >= parseFloat(lastDiscount.innerText)) {
-      const afterDiscount = total - lastDiscount.innerText;
-      console.log(afterDiscount);
-      lastAfterDiscount.innerText = afterDiscount;
-    } else if (total < parseFloat(lastDiscount.innerText)) {
-      lastAfterDiscount.innerText = "الخصم اكبر من المجموع";
-    } else {
-      lastAfterDiscount.innerText = lastDiscount.innerText;
+    if (totalCm >= 100) {
+      totalMeter += Math.floor(totalCm / 100);
+      totalCm %= 100;
     }
-  });
-  // console.log("discount");
-};
 
+    let meterCmString = totalMeter.toString();
+    if (totalCm > 0) {
+      meterCmString += "." + totalCm.toString().padStart(2, "0");
+    }
+
+    const totalPrice = qty * parseFloat(meterCmString) * price;
+    totalPriceDisplay.innerText = totalPrice.toFixed(2);
+    calcTotal();
+  } else {
+    totalPriceDisplay.innerText = "Invalid";
+  }
+}
 function attachRealTimeCalculations(itemRow) {
   const qtyInput = itemRow.querySelector(".qty");
   const cmInput = itemRow.querySelector(".cm");
@@ -334,10 +328,10 @@ function attachRealTimeCalculations(itemRow) {
 
   [qtyInput, cmInput, meterInput, priceInput].forEach((input) => {
     input.addEventListener("input", () => {
-      const qty = parseInt(qtyInput.innerText);
-      const cm = parseInt(cmInput.innerText);
-      const meter = parseInt(meterInput.innerText);
-      const price = parseFloat(priceInput.innerText);
+      const qty = parseInt(qtyInput.innerText) || 0;
+      const cm = parseInt(cmInput.innerText) || 0;
+      const meter = parseInt(meterInput.innerText) || 0;
+      const price = parseFloat(priceInput.innerText) || 0;
 
       // Check if all inputs are valid numbers
       if (!isNaN(qty) && !isNaN(cm) && !isNaN(meter) && !isNaN(price)) {
@@ -355,68 +349,17 @@ function attachRealTimeCalculations(itemRow) {
         }
 
         const totalPrice = qty * parseFloat(meterCmString) * price;
-        totalPriceDisplay.innerText = totalPrice;
+        totalPriceDisplay.innerText = totalPrice.toFixed(2);
         calcTotal();
       } else {
-        totalPriceDisplay.innerText = "Invalid";
+        totalPriceDisplay.innerText =
+          " ادخل ارقام صحيحة او املي الخانات الفارغة اصفارا";
       }
     });
   });
 }
 const itemRow = document.querySelector(".item-row");
 attachRealTimeCalculations(itemRow);
-
-// this listner is reponsable of adding the price cut and change the total after but
-function applyListnerOnCut(pageNum) {
-  // retrive the input we will add the number of price cut on
-  let ele = getElementByXpath(
-    `/html/body/div/div[@id="page${pageNum}"]/div[3]/div/div[2]/div[2]/div[2]/input`,
-    document
-  );
-  ele.addEventListener("input", (e) => {
-    handelDomChange(pageNum);
-  });
-}
-
-function handelDomChange(pageNum) {
-  const e = getElementByXpath(
-    `/html/body/div/div[@id="page${pageNum}"]/div[3]/div/div[2]/div[2]/div[2]/input`,
-    document
-  );
-  const valueOfInput = e.value;
-  // this is the parent
-  const parent = e.parentElement.parentElement.parentElement;
-  const total = getElementByXpath(
-    "div[2]/p",
-    getElementByXpath("div[1]", parent)
-  ).innerHTML;
-  const afterSalecut = getElementByXpath(
-    "div[2]/p",
-    getElementByXpath("div[3]", parent)
-  );
-  afterSalecut.innerHTML = parseFloat(total) - valueOfInput;
-}
-//////////////// reset all values to zero in the last ele
-function clearLast(pageNum) {
-  let ele = getElementByXpath(
-    `/html/body/div/div[@id="page${pageNum}"]/div[3]/div/div[2]/div[2]/div[2]/input`,
-    document
-  );
-  const parent = ele.parentElement.parentElement.parentElement;
-  ele.value = "";
-  const total = getElementByXpath(
-    "div[2]/p",
-    getElementByXpath("div[1]", parent)
-  ).innerHTML;
-  total.innerHTML = "";
-  const afterSalecut = getElementByXpath(
-    "div[2]/p",
-    getElementByXpath("div[3]", parent)
-  );
-  afterSalecut.innerHTML = "";
-  applyListnerOnCut;
-}
-applyListnerOnCut(0);
 //////////////////////////////////////////////////////////////////////
 // Save the invoice data, client details and items to the database
 const saveBTN = document.getElementById("save");
@@ -451,6 +394,7 @@ saveBTN.addEventListener("click", async () => {
 
     items.push(itemData);
   });
+  reSelectElements();
 
   const Data = {
     customer_name: CUSTOMER_NAME.value,
@@ -458,19 +402,22 @@ saveBTN.addEventListener("click", async () => {
     customer_phone: CUSTOMER_PHONE.value,
     invoice_number: INVOICE_NUM.innerText,
     invoice_date: INVOICE_DATE.value,
+    invoice_total: lastTotal.innerText,
+    discount: lastDiscount.innerText,
+    after_discount: lastAfterDiscount.innerText,
     items,
   };
 
   console.log(Data);
-  await axios
-    .post(`${BASE_URL}post`, JSON.stringify(Data))
-    .then((response) => {
-      console.log(response.data);
-      getLastInvoiceNumber();
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  // await axios
+  //   .post(`${BASE_URL}post`, JSON.stringify(Data))
+  //   .then((response) => {
+  //     console.log(response.data);
+  //     getLastInvoiceNumber();
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error:", error);
+  //   });
 });
 
 /////////// Autocomplete customer name //////////////////////////////////////
@@ -502,7 +449,10 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
           option.textContent = customer.customer_name;
           option.classList.add("autocompleteOption");
           option.addEventListener("click", function () {
-            customerNameInput.value = customer.customer_name;
+            // customerNameInput.value = customer.customer_name;
+            document.querySelectorAll(".clientName").forEach((ele) => {
+              ele.value = customer.customer_name;
+            });
             autocompleteResults.innerHTML = "";
           });
           autocompleteResults.appendChild(option);
@@ -592,7 +542,7 @@ function attachAutocompleteListener(
       .then((data) => {
         const items = data.items;
         const uniqueItemNames = getUniqueItemNames(items);
-        console.log(uniqueItemNames);
+
         if (uniqueItemNames.length !== 0) {
           itemAutocomplete.style.display = "block";
         } else {
@@ -607,7 +557,8 @@ function attachAutocompleteListener(
             itemNameInput.value = item;
             itemAutocomplete.innerHTML = "";
             itemAutocomplete.style.display = "none";
-            itemPrice.innerHTML = getLastInsertedItemPrice(items, item);
+            itemPrice.innerText = getLastInsertedItemPrice(items, item);
+            calculateRowTotalPrice(itemNameInput.parentElement.parentElement);
           });
           itemAutocomplete.appendChild(option);
         });
@@ -628,7 +579,8 @@ function attachAutocompleteListener(
 
 // Function to generate a new item row
 function generateItemRow(colNum) {
-  let content = `<div class="row item-row">
+  let content = `
+  <div class="row item-row">
     <div class="cell0"><p>${colNum}</p></div>
     <div>
     <input type="text" class="itemNameInput" placeholder="...أكتب اسم السلعة">
@@ -648,10 +600,12 @@ function generateItemRow(colNum) {
   // Create a temporary div element to attach the new row
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = content;
-  const newItemRow = tempDiv.firstChild;
+  const newItemRow = tempDiv.firstElementChild;
 
   // Attach event listener to the autocomplete input field of the new row
+
   const newItemNameInput = newItemRow.querySelector(".itemNameInput");
+
   const newItemAutocomplete = newItemRow.querySelector(".itemAutocomplete");
   const newItemPrice = newItemRow.querySelector(".cell6");
   attachAutocompleteListener(
@@ -659,9 +613,7 @@ function generateItemRow(colNum) {
     newItemAutocomplete,
     newItemPrice
   );
-  // Attach real-time calculations to the new row
   attachRealTimeCalculations(newItemRow);
 
   return newItemRow;
 }
-discount();

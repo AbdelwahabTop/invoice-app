@@ -169,7 +169,7 @@
               </div>
               <!-- | -->
               <div contenteditable="true" class="cell2 discount">
-                <input type="text" />
+                <p>0</p>
               </div>
             </div>
 

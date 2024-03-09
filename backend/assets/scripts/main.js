@@ -205,8 +205,6 @@ document.getElementById("add").addEventListener("click", function () {
   if (currentPage === null || currentItemCount >= maximumItemsPerPage) {
     elePerPage.push(0);
     createNewPage(elePerPage.length - 1);
-    applyListnerOnCut(elePerPage.length - 1);
-    clearLast(elePerPage.length - 2);
   }
 
   for (let i = 0; i < elePerPage.length; i++) {
@@ -256,58 +254,6 @@ const calcTotal = () => {
   }
   return total;
 };
-
-// this listner is reponsable of adding the price cut and change the total after but
-function applyListnerOnCut(pageNum) {
-  // retrive the input we will add the number of price cut on
-  let ele = getElementByXpath(
-    `/html/body/div/div[@id="page${pageNum}"]/div[3]/div/div[2]/div[2]/div[2]/input`,
-    document
-  );
-  ele.addEventListener("input", (e) => {
-    handelDomChange(pageNum);
-  });
-}
-
-function handelDomChange(pageNum) {
-  const e = getElementByXpath(
-    `/html/body/div/div[@id="page${pageNum}"]/div[3]/div/div[2]/div[2]/div[2]/input`,
-    document
-  );
-  const valueOfInput = e.value;
-  // this is the parent
-  const parent = e.parentElement.parentElement.parentElement;
-  const total = getElementByXpath(
-    "div[2]/p",
-    getElementByXpath("div[1]", parent)
-  ).innerHTML;
-  const afterSalecut = getElementByXpath(
-    "div[2]/p",
-    getElementByXpath("div[3]", parent)
-  );
-  afterSalecut.innerHTML = parseFloat(total) - valueOfInput;
-}
-// reset all values to zero in the last ele
-function clearLast(pageNum) {
-  let ele = getElementByXpath(
-    `/html/body/div/div[@id="page${pageNum}"]/div[3]/div/div[2]/div[2]/div[2]/input`,
-    document
-  );
-  const parent = ele.parentElement.parentElement.parentElement;
-  ele.value = "";
-  const total = getElementByXpath(
-    "div[2]/p",
-    getElementByXpath("div[1]", parent)
-  ).innerHTML;
-  total.innerHTML = "";
-  const afterSalecut = getElementByXpath(
-    "div[2]/p",
-    getElementByXpath("div[3]", parent)
-  );
-  afterSalecut.innerHTML = "";
-  applyListnerOnCut;
-}
-applyListnerOnCut(0);
 
 const saveBTN = document.getElementById("save");
 
