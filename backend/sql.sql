@@ -9,6 +9,9 @@ CREATE TABLE invoice (
     id INT AUTO_INCREMENT PRIMARY KEY,
     invoice_number VARCHAR(50) NOT NULL,
     invoice_date DATE,
+    invoice_total DECIMAL(10, 2),
+    discount DECIMAL(10, 2),
+    after_discount DECIMAL(10, 2),
     customer_id INT,
     FOREIGN KEY (customer_id) REFERENCES customer(id)
 );

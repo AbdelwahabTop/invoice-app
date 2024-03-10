@@ -292,63 +292,31 @@ document.getElementById("add").addEventListener("click", function () {
 //////////////////////////////////////////////////////////////////////////////////////
 function calculateRowTotalPrice(itemRow) {
   const qty = parseInt(itemRow.querySelector(".qty").innerText);
-  const cm = parseInt(itemRow.querySelector(".cm").innerText);
-  const meter = parseInt(itemRow.querySelector(".meter").innerText);
   const price = parseFloat(itemRow.querySelector(".price").innerText);
   const totalPriceDisplay = itemRow.querySelector(".total-price");
 
   // Check if all inputs are valid numbers
-  if (!isNaN(qty) && !isNaN(cm) && !isNaN(meter) && !isNaN(price)) {
-    let totalCm = cm;
-    let totalMeter = meter;
-
-    if (totalCm >= 100) {
-      totalMeter += Math.floor(totalCm / 100);
-      totalCm %= 100;
-    }
-
-    let meterCmString = totalMeter.toString();
-    if (totalCm > 0) {
-      meterCmString += "." + totalCm.toString().padStart(2, "0");
-    }
-
-    const totalPrice = qty * parseFloat(meterCmString) * price;
+  if (!isNaN(qty) && !isNaN(price)) {
+    const totalPrice = qty * price;
     totalPriceDisplay.innerText = totalPrice.toFixed(2);
     calcTotal();
   } else {
-    totalPriceDisplay.innerText = "Invalid";
+    totalPriceDisplay.innerText =
+      " ادخل ارقام صحيحة او املي الخانات الفارغة اصفارا";
   }
 }
 function attachRealTimeCalculations(itemRow) {
   const qtyInput = itemRow.querySelector(".qty");
-  const cmInput = itemRow.querySelector(".cm");
-  const meterInput = itemRow.querySelector(".meter");
   const priceInput = itemRow.querySelector(".price");
   const totalPriceDisplay = itemRow.querySelector(".total-price");
 
-  [qtyInput, cmInput, meterInput, priceInput].forEach((input) => {
+  [qtyInput, priceInput].forEach((input) => {
     input.addEventListener("input", () => {
       const qty = parseInt(qtyInput.innerText) || 0;
-      const cm = parseInt(cmInput.innerText) || 0;
-      const meter = parseInt(meterInput.innerText) || 0;
       const price = parseFloat(priceInput.innerText) || 0;
 
-      // Check if all inputs are valid numbers
-      if (!isNaN(qty) && !isNaN(cm) && !isNaN(meter) && !isNaN(price)) {
-        let totalCm = cm;
-        let totalMeter = meter;
-
-        if (totalCm >= 100) {
-          totalMeter += Math.floor(totalCm / 100);
-          totalCm %= 100;
-        }
-
-        let meterCmString = totalMeter.toString();
-        if (totalCm > 0) {
-          meterCmString += "." + totalCm.toString().padStart(2, "0");
-        }
-
-        const totalPrice = qty * parseFloat(meterCmString) * price;
+      if (!isNaN(qty) && !isNaN(price)) {
+        const totalPrice = qty * price;
         totalPriceDisplay.innerText = totalPrice.toFixed(2);
         calcTotal();
       } else {
@@ -409,15 +377,15 @@ saveBTN.addEventListener("click", async () => {
   };
 
   console.log(Data);
-  // await axios
-  //   .post(`${BASE_URL}post`, JSON.stringify(Data))
-  //   .then((response) => {
-  //     console.log(response.data);
-  //     getLastInvoiceNumber();
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error:", error);
-  //   });
+  await axios
+    .post(`${BASE_URL}post`, JSON.stringify(Data))
+    .then((response) => {
+      console.log(response.data);
+      getLastInvoiceNumber();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 });
 
 /////////// Autocomplete customer name //////////////////////////////////////
@@ -434,7 +402,7 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
       autocompleteResults.innerHTML = "";
       return;
     }
-    fetch(`${BASE_URL}get_client/?query=${query}`)
+    fetch(`${BASE_URL}get_client_by_name/?query=${query}`)
       .then((response) => response.json())
       .then((data) => {
         const results = data.results;
@@ -617,3 +585,4 @@ function generateItemRow(colNum) {
 
   return newItemRow;
 }
+/////////////////////////////////////////////////////////////////////////////

@@ -7,9 +7,24 @@ class ClientModel extends CI_Model
         $this->load->database();
     }
 
-    public function getClients($query)
+    public function getAllClients()
     {
-        $this->db->select('id, customer_name');
+        $this->db->select('id, customer_name, customer_phone, customer_address');
+        $query = $this->db->get('customer');
+        return $query->result_array();
+    }
+
+    public function getClientById($id)
+    {
+        $this->db->select('id, customer_name, customer_phone, customer_address');
+        $this->db->where('id', $id);
+        $query = $this->db->get('customer');
+        return $query->row();
+    }
+
+    public function getClientsByName($query)
+    {
+        $this->db->select('id, customer_name, customer_phone, customer_address');
         $this->db->like('customer_name', $query);
         $query = $this->db->get('customer');
         return $query->result_array();

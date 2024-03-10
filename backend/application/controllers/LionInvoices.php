@@ -11,10 +11,24 @@ class LionInvoices extends CI_Controller
         $this->load->model('ItemsModel');
     }
 
-    public function getClient()
+    public function getAllClients()
+    {
+        $clients = $this->ClientModel->getAllClients();
+        echo json_encode(['clients' => $clients]);
+        return json_encode($clients);
+    }
+
+    public function getClientById($id)
+    {
+        $client = $this->ClientModel->getClientById($id);
+        echo json_encode(['client' => $client]);
+        return json_encode($client);
+    }
+
+    public function getClientsByName()
     {
         $query = $this->input->get('query');
-        $customers = $this->ClientModel->getClients($query);
+        $customers = $this->ClientModel->getClientsByName($query);
         echo json_encode(['results' => $customers]);
         return json_encode($customers);
     }
@@ -25,6 +39,20 @@ class LionInvoices extends CI_Controller
         $items = $this->ItemsModel->getItems($query);
         echo json_encode(['items' => $items]);
         return json_encode($items);
+    }
+
+    public function getAllInvoices()
+    {
+        $invoices = $this->InvoiceModel->getAllInvoices();
+        echo json_encode(['invoices' => $invoices]);
+        return json_encode($invoices);
+    }
+
+    public function getInvoiceDetails($id)
+    {
+        $invoice = $this->InvoiceModel->getInvoiceDetails($id);
+        echo json_encode(['invoice' => $invoice]);
+        return json_encode($invoice);
     }
 
     public function getLastInvoice()
@@ -57,6 +85,9 @@ class LionInvoices extends CI_Controller
         $invoice_data = array(
             'invoice_number' => $data['invoice_number'],
             'invoice_date' => $data['invoice_date'],
+            'invoice_total' => $data['invoice_total'],
+            'discount' => $data['discount'],
+            'after_discount' => $data['after_discount'],
             'customer_id' => $customer_id
         );
         $this->InvoiceModel->insert($invoice_data);
