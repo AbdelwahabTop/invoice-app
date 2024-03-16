@@ -1,9 +1,52 @@
+document.addEventListener("DOMContentLoaded", function () {
+  var links = document.querySelectorAll("a");
+
+  links.forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+    });
+  });
+});
 document.getElementById("print").addEventListener("click", function () {
   print();
 });
 document.getElementById("reset").addEventListener("click", function () {
-  location.reload();
+  const queryParams = new URLSearchParams(window.location.search);
+  queryParams.delete("invokeFunction");
+  queryParams.delete("id");
+  window.location.href = "http://localhost/files/frontend/sales invoices.php";
 });
+document.getElementById("route").addEventListener("click", function () {
+  window.location.href = "http://localhost/files/frontend/data.html";
+});
+
+function parseURLParams() {
+  const queryParams = new URLSearchParams(window.location.search);
+  const params = {};
+  for (const [key, value] of queryParams.entries()) {
+    params[key] = value;
+  }
+  return params;
+}
+// Function to check if the invokeFunction parameter is set to true
+function shouldInvokeFunction(params) {
+  return (
+    params.hasOwnProperty("invokeFunction") &&
+    params["invokeFunction"] === "true"
+  );
+}
+// Function to handle invoking the function if needed
+function handleFunctionInvocation(params) {
+  if (shouldInvokeFunction(params)) {
+    const id = params["id"];
+    // Invoke your function here using the received ID
+    setTimeout(() => {
+      showInvoiceInMainPage(parseInt(id));
+    }, 1000);
+  }
+}
+const urlParams = parseURLParams();
+handleFunctionInvocation(urlParams);
 
 const BASE_URL = "http://localhost/files/backend/";
 const CUSTOMER_NAME = document.getElementById("NAME");
@@ -204,7 +247,7 @@ function autoFillCusData() {
 }
 /////////////// عند انشاء صفحة جديدة تفريغ بيانات السعر والخصم من الصفحات القديمة ووضعه بالصفحة الجديدة //////////
 function resetValues() {
-  discountNum = discountEles[discountEles.length - 2].innerText;
+  let discountNum = discountEles[discountEles.length - 2].innerText;
   invTotalSec.forEach((ele) => {
     ele.innerText = " ";
   });
@@ -262,7 +305,11 @@ function getElementByXpath(path, parent) {
   ).singleNodeValue;
 }
 
-document.getElementById("add").addEventListener("click", function () {
+function addNewItem(pointerEvent, price, totalPrice, quantity, itemName) {
+  const money = price || "00.00";
+  const qty = quantity || 1;
+  const totalMony = totalPrice || "00.00";
+  const item = itemName || "";
   if (currentPage === null || currentItemCount >= maximumItemsPerPage) {
     elePerPage.push(0);
     createNewPage(elePerPage.length - 1);
@@ -279,7 +326,7 @@ document.getElementById("add").addEventListener("click", function () {
         return acc + currVal;
       }, 0);
 
-      parent.append(generateItemRow(currentCell));
+      parent.append(generateItemRow(currentCell, qty, money, totalMony, item));
       break;
     }
   }
@@ -287,7 +334,76 @@ document.getElementById("add").addEventListener("click", function () {
   if (currentItemCount >= maximumItemsPerPage) {
     currentPage = null;
   }
-});
+}
+
+// Function to generate a new item row
+function generateItemRow(colNum, quantity, price, totalPrice, itemName) {
+  let content = `
+  <div class="row item-row">
+    <div class="cell0"><p>${colNum}</p></div>
+    <div>
+    <input type="text" class="itemNameInput" placeholder="...أكتب اسم السلعة" value="${itemName}">
+  </div>
+  <ul class="itemAutocomplete"></ul>
+    <div contenteditable="true" class="cell3 qty"><p>${quantity}</p></div>
+    <div class="cell4 cm"><p>00</p></div>
+    <div class="cell5 meter">
+      <p class="c1">00</p>
+    </div>
+    <div contenteditable="true" class="cell6 price">
+      <p class="c1">${price}</p>
+    </div>
+    <div class="cell7 total-price"><p>${totalPrice}</p></div>
+  </div>`;
+
+  // Create a temporary div element to attach the new row
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = content;
+  const newItemRow = tempDiv.firstElementChild;
+
+  // Attach event listener to the autocomplete input field of the new row
+
+  const newItemNameInput = newItemRow.querySelector(".itemNameInput");
+
+  const newItemAutocomplete = newItemRow.querySelector(".itemAutocomplete");
+  const newItemPrice = newItemRow.querySelector(".cell6");
+  attachAutocompleteListener(
+    newItemNameInput,
+    newItemAutocomplete,
+    newItemPrice
+  );
+  attachRealTimeCalculations(newItemRow);
+
+  return newItemRow;
+}
+
+document.getElementById("add").addEventListener("click", addNewItem);
+//////////////////////////////////////////////////
+async function showInvoiceInMainPage(invoiceId) {
+  try {
+    const invoiceResponse = await fetch(
+      `${BASE_URL}get_invoice_details/${invoiceId}`
+    );
+    const invoiceData = (await invoiceResponse.json()).invoice;
+    const items = invoiceData.items;
+
+    items.forEach((item) => {
+      addNewItem("", item.price, item.total_price, item.qty, item.name);
+    });
+    CUSTOMER_NAME.value = invoiceData.customer_name;
+    CUSTOMER_ADDRESS.innerText = invoiceData.customer_address;
+    CUSTOMER_PHONE.value = invoiceData.customer_phone;
+    INVOICE_NUM.innerText = invoiceData.invoice_number;
+    INVOICE_DATE.value = invoiceData.date;
+    autoFillCusData();
+    reSelectElements();
+    lastTotal.innerText = invoiceData.totalAmount;
+    lastDiscount.innerText = invoiceData.discount;
+    lastAfterDiscount.innerText = invoiceData.afterDiscount;
+  } catch {
+    console.error("Error fetching invoice details", error);
+  }
+}
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 function calculateRowTotalPrice(itemRow) {
@@ -329,65 +445,114 @@ function attachRealTimeCalculations(itemRow) {
 const itemRow = document.querySelector(".item-row");
 attachRealTimeCalculations(itemRow);
 //////////////////////////////////////////////////////////////////////
-// Save the invoice data, client details and items to the database
+///////////////////// Save the invoice data ////////////////////////
 const saveBTN = document.getElementById("save");
 saveBTN.addEventListener("click", async () => {
   const itemRows = document.querySelectorAll(".item-row");
   const items = [];
 
-  itemRows.forEach((row) => {
-    const cells = row.querySelectorAll(
-      ".itemNameInput, .cell3, .cell6, .cell7"
-    );
-    const itemData = {};
+  let pdfData;
 
-    cells.forEach((cell, index) => {
-      switch (index) {
-        case 0:
-          itemData.item_name = cell.value;
-          break;
-        case 1:
-          itemData.qty = parseInt(cell.innerText.trim());
-          break;
-        case 2:
-          itemData.price = parseFloat(cell.innerText.trim());
-          break;
-        case 3:
-          itemData.total_price = parseFloat(cell.innerText.trim());
-          break;
-        default:
-          break;
-      }
-    });
+  window.html2canvas = html2canvas;
+  window.jsPDF = window.jspdf.jsPDF;
 
-    items.push(itemData);
+  document.querySelectorAll(".itemNameInput, .clientName").forEach((input) => {
+    input.style.textAlign = "center";
   });
-  reSelectElements();
+  document.querySelector(".book").style.width = "309mm";
+  document.querySelector(".book").style.height = "auto";
+  document.querySelector(".book").style.margin = "auto";
 
-  const Data = {
-    customer_name: CUSTOMER_NAME.value,
-    customer_address: CUSTOMER_ADDRESS.innerText,
-    customer_phone: CUSTOMER_PHONE.value,
-    invoice_number: INVOICE_NUM.innerText,
-    invoice_date: INVOICE_DATE.value,
-    invoice_total: lastTotal.innerText,
-    discount: lastDiscount.innerText,
-    after_discount: lastAfterDiscount.innerText,
-    items,
-  };
+  html2canvas(document.querySelector(".book"), {
+    scale: 1,
+    allowTaint: true,
+    useCORS: true,
+  }).then((canvas) => {
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+    const aspectRatio = imgWidth / imgHeight;
+    const pdfWidth = 210;
+    const pdfHeight = pdfWidth / aspectRatio;
 
-  console.log(Data);
-  await axios
-    .post(`${BASE_URL}post`, JSON.stringify(Data))
-    .then((response) => {
-      console.log(response.data);
-      getLastInvoiceNumber();
-    })
-    .catch((error) => {
-      console.error("Error:", error);
+    var img = canvas.toDataURL("image/png");
+    const pdf = new jsPDF({
+      unit: "mm",
+      format: [pdfWidth, pdfHeight],
     });
-});
 
+    pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.setFontSize(25);
+
+    const blob = pdf.output("blob");
+
+    pdfData = new Blob([blob], { type: "application/pdf" });
+
+    const formData = new FormData();
+    formData.append("pdfFile", pdfData);
+    document
+      .querySelectorAll(".itemNameInput, .clientName")
+      .forEach((input) => {
+        input.style.textAlign = "right";
+      });
+
+    formData.append(
+      "customer_name",
+      CUSTOMER_NAME.value || "لم يتم تسجيل اسم العميل"
+    );
+    formData.append("customer_address", CUSTOMER_ADDRESS.innerText);
+    formData.append("customer_phone", CUSTOMER_PHONE.value);
+    formData.append("invoice_number", INVOICE_NUM.innerText);
+    formData.append("invoice_date", INVOICE_DATE.value);
+    formData.append("invoice_total", lastTotal.innerText);
+    formData.append("discount", lastDiscount.innerText);
+    formData.append("after_discount", lastAfterDiscount.innerText);
+
+    // Append item data to FormData
+    itemRows.forEach((row) => {
+      const cells = row.querySelectorAll(
+        ".itemNameInput, .cell3, .cell6, .cell7"
+      );
+      const itemData = {};
+
+      cells.forEach((cell, index) => {
+        switch (index) {
+          case 0:
+            itemData.item_name = cell.value;
+            break;
+          case 1:
+            itemData.qty = parseInt(cell.innerText.trim());
+            break;
+          case 2:
+            itemData.price = parseFloat(cell.innerText.trim());
+            break;
+          case 3:
+            itemData.total_price = parseFloat(cell.innerText.trim());
+            break;
+          default:
+            break;
+        }
+      });
+
+      items.push(itemData);
+    });
+
+    formData.append("items", JSON.stringify(items));
+
+    axios
+      .post(`${BASE_URL}post`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        getLastInvoiceNumber();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+});
+////////////////////////////////////////////////////////////////
 /////////// Autocomplete customer name //////////////////////////////////////
 const customerNameInput = document.querySelectorAll(".clientName");
 const autocompleteResults = document.querySelectorAll(".autocomplete-results");
@@ -420,6 +585,12 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
             // customerNameInput.value = customer.customer_name;
             document.querySelectorAll(".clientName").forEach((ele) => {
               ele.value = customer.customer_name;
+            });
+            document.querySelectorAll(".clientAddress").forEach((ele) => {
+              ele.innerText = customer.customer_address || " ";
+            });
+            document.querySelectorAll(".clientPhone").forEach((ele) => {
+              ele.value = customer.customer_phone || " ";
             });
             autocompleteResults.innerHTML = "";
           });
@@ -463,6 +634,7 @@ function getLastInvoiceNumber() {
     .then((response) => response.json())
     .then((data) => {
       const lastInvoiceNumber = data.last_invoice;
+      let invoiceNumberElements;
       invoiceNumberElements = document.querySelectorAll(".invoiceNumber");
       invoiceNumberElements.forEach((element) => {
         element.innerText = parseInt(lastInvoiceNumber) + 1;
@@ -543,46 +715,5 @@ function attachAutocompleteListener(
       itemAutocomplete.style.display = "none";
     }
   });
-}
-
-// Function to generate a new item row
-function generateItemRow(colNum) {
-  let content = `
-  <div class="row item-row">
-    <div class="cell0"><p>${colNum}</p></div>
-    <div>
-    <input type="text" class="itemNameInput" placeholder="...أكتب اسم السلعة">
-  </div>
-  <ul class="itemAutocomplete"></ul>
-    <div contenteditable="true" class="cell3 qty"><p>1</p></div>
-    <div contenteditable="true" class="cell4 cm"><p>00</p></div>
-    <div contenteditable="true" class="cell5 meter">
-      <p class="c1">00</p>
-    </div>
-    <div contenteditable="true" class="cell6 price">
-      <p class="c1">00.00</p>
-    </div>
-    <div class="cell7 total-price"><p>00.00</p></div>
-  </div>`;
-
-  // Create a temporary div element to attach the new row
-  const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = content;
-  const newItemRow = tempDiv.firstElementChild;
-
-  // Attach event listener to the autocomplete input field of the new row
-
-  const newItemNameInput = newItemRow.querySelector(".itemNameInput");
-
-  const newItemAutocomplete = newItemRow.querySelector(".itemAutocomplete");
-  const newItemPrice = newItemRow.querySelector(".cell6");
-  attachAutocompleteListener(
-    newItemNameInput,
-    newItemAutocomplete,
-    newItemPrice
-  );
-  attachRealTimeCalculations(newItemRow);
-
-  return newItemRow;
 }
 /////////////////////////////////////////////////////////////////////////////

@@ -1,16 +1,33 @@
-/////////////////////New Page///////////////////////////////////////////////
 const BASE_URL = "http://localhost/files/backend/";
 
+$(document).ready(function () {
+  $("#invoiceTable").DataTable();
+  $("#itemsTable").DataTable();
+});
+
 function showModal() {
-  document.getElementById("invoiceModal").style.display = "block";
+  $("#invoiceModal").css("display", "block");
 }
 
-// Function to close the modal
 function closeModal() {
-  document.getElementById("invoiceModal").style.display = "none";
+  $("#invoiceModal").css("display", "none");
 }
 
-// Function to fetch all invoices from the server
+$(document).ready(function () {
+  $(".back").on("click", function () {
+    window.location.href = "http://localhost/files/frontend/sales invoices.php";
+  });
+});
+
+function generatePage1URL(id) {
+  const baseUrl = "sales invoices.php";
+  const queryParams = new URLSearchParams();
+  queryParams.append("id", id);
+  queryParams.append("invokeFunction", "true");
+  const mainPageUrl = `${baseUrl}?${queryParams.toString()}`;
+  window.location.href = mainPageUrl;
+}
+
 async function fetchAllInvoices() {
   try {
     const response = await fetch(`${BASE_URL}invoices`);
@@ -40,48 +57,37 @@ async function showInvoiceDetails(invoiceId) {
       `${BASE_URL}get_invoice_details/${invoiceId}`
     );
     const invoiceData = (await invoiceResponse.json()).invoice;
-    console.log("Invoice Data", invoiceData);
+    const id = invoiceData.id;
+    $("#go-to-main").on("click", function () {
+      generatePage1URL(id);
+    });
 
     const customerData = (await fetchCustomerById(invoiceData.customer_id))
       .client;
-    console.log("Customer Data", customerData);
 
-    document.getElementById(
-      "invoiceID"
-    ).textContent = `Invoice ID: ${invoiceData.id}`;
-    document.getElementById(
-      "customerName"
-    ).textContent = `Customer: ${customerData.customer_name}`;
-    document.getElementById(
-      "customerPhone"
-    ).textContent = `Phone: ${customerData.customer_phone}`;
-    document.getElementById(
-      "customerAddress"
-    ).textContent = `Address: ${customerData.customer_address}`;
-    document.getElementById(
-      "invoiceDate"
-    ).textContent = `Date: ${invoiceData.date}`;
-    document.getElementById(
-      "totalAmount"
-    ).textContent = `Total Amount: ${invoiceData.totalAmount}`;
-    document.getElementById(
-      "discount"
-    ).textContent = `Discount: ${invoiceData.discount}`;
-    document.getElementById(
-      "afterDiscount"
-    ).textContent = `After Discount: ${invoiceData.afterDiscount}`;
+    $("#invoiceID").text(` ${invoiceData.invoice_number || "لا يوجد"}`);
+    $("#customerName").text(
+      ` ${customerData.customer_name || "لم يتم أدخال اسم العميل مسبقا"}`
+    );
+    $("#customerPhone").text(
+      ` ${customerData.customer_phone || "لم يتم أدخال رقم الهاتف مسبقا"}`
+    );
+    $("#customerAddress").text(
+      ` ${customerData.customer_address || "لم يتم أدخال عنوان العميل مسبقا"}`
+    );
+    $("#invoiceDate").text(
+      ` ${invoiceData.date || "لم يتم أدخال تاريخ الفاتورة مسبقا"}`
+    );
+    $("#totalAmount").text(` ${invoiceData.totalAmount || "لا يوجد"} `);
+    $("#discount").text(` ${invoiceData.discount || "لا يوجد"}`);
+    $("#afterDiscount").text(` ${invoiceData.afterDiscount || "لا يوجد"}`);
 
-    const itemsTable = document.querySelector("#itemsTable tbody");
-    itemsTable.innerHTML = "";
+    const itemsTable = $("#itemsTable").DataTable();
+    itemsTable.clear().draw();
     invoiceData.items.forEach((item) => {
-      const itemRow = document.createElement("tr");
-      itemRow.innerHTML = `
-            <td>${item.name}</td>
-            <td>${item.price}</td>
-            <td>${item.quantity}</td>
-            <td>${item.total_price}</td>
-          `;
-      itemsTable.appendChild(itemRow);
+      itemsTable.row
+        .add([item.name, item.price, item.quantity, item.total_price])
+        .draw(false);
     });
 
     showModal();
@@ -89,80 +95,90 @@ async function showInvoiceDetails(invoiceId) {
     console.error("Error displaying invoice details:", error);
   }
 }
+
 async function renderTable(invoices) {
   try {
     if (!invoices) {
       invoices = (await fetchAllInvoices()).invoices;
     }
-    console.log("Invoices", invoices);
-    const tableBody = document.querySelector("#invoiceTable tbody");
-    tableBody.innerHTML = "";
 
+    const invoiceTable = $("#invoiceTable").DataTable();
+    invoiceTable.clear().draw();
     invoices.forEach(async (invoice) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-            <td>${invoice.invoice_number}</td>
-            <td>${invoice.customer_name}</td>
-            <td>${invoice.invoice_date}</td>
-            <td>${invoice.after_discount}</td>
-          `;
-      row.addEventListener("click", () => showInvoiceDetails(invoice.id));
-      tableBody.appendChild(row);
+      const row = invoiceTable.row
+        .add([
+          invoice.invoice_number,
+          invoice.customer_name,
+          invoice.invoice_date,
+          invoice.after_discount,
+        ])
+        .draw(false)
+        .node();
+
+      $(row).on("click", function () {
+        showInvoiceDetails(invoice.id);
+      });
     });
   } catch (error) {
     console.error("Error rendering table:", error);
   }
 }
 
-window.onclick = function (event) {
-  const modal = document.getElementById("invoiceModal");
-  if (event.target == modal) {
+$(document).on("click", function (event) {
+  const modal = $("#invoiceModal")[0];
+  if (event.target == modal || $(event.target).hasClass("close")) {
     closeModal();
   }
-};
+});
+$(".close").on("click", function () {
+  closeModal();
+});
 
 renderTable();
 
 function searchAutoComplete() {
-  const search = document.getElementById("customerSearchInput");
-  //   const searchTerms = search.value.trim().toLowerCase();
-  const searchResults = document.querySelector(".search-results");
+  const search = $("#customerSearchInput");
+  const searchResults = $(".search-results");
 
-  search.addEventListener("input", function () {
-    const query = this.value.trim();
+  search.on("input", function () {
+    const query = $(this).val().trim();
 
     if (query.length === 0) {
-      searchResults.innerHTML = "";
+      searchResults.html("");
       return;
     }
+
     fetch(`${BASE_URL}get_client_by_name/?query=${query}`)
       .then((response) => response.json())
       .then((data) => {
         const results = data.results;
-        searchResults.innerHTML = "";
+        searchResults.html("");
         if (results.length !== 0) {
-          searchResults.style.display = "block";
+          searchResults.css("display", "block");
         } else {
-          searchResults.style.display = "none";
+          searchResults.css("display", "none");
         }
         results.forEach((customer, i) => {
-          const option = document.createElement("li");
-          option.textContent = customer.customer_name;
-          option.classList.add("search-autocomplete");
-          option.addEventListener("click", function () {
-            search.value = customer.customer_name;
-            searchResults.innerHTML = "";
+          const option = $('<li class="search-autocomplete"></li>').text(
+            customer.customer_name
+          );
+          option.on("click", function () {
+            search.val(customer.customer_name);
+            searchResults.html("");
           });
-          searchResults.appendChild(option);
+          searchResults.append(option);
         });
       });
   });
 
   // Close dropdown when clicking outside
-  document.addEventListener("click", function (event) {
-    if (!event.target.closest(".search-results") && event.target !== search) {
-      searchResults.innerHTML = "";
-      searchResults.style.display = "none";
+  $(document).on("click", function (event) {
+    if (
+      !$(event.target).closest(".search-results") &&
+      event.target !== search[0]
+    ) {
+      searchResults.html("");
+      searchResults.css("display", "none");
     }
   });
 }
@@ -170,12 +186,9 @@ function searchAutoComplete() {
 searchAutoComplete();
 
 function searchCustomer() {
-  const searchBtn = document.getElementById("searchBtn");
-  searchBtn.addEventListener("click", async function () {
-    const searchTerm = document
-      .getElementById("customerSearchInput")
-      .value.trim()
-      .toLowerCase();
+  const searchBtn = $("#searchBtn");
+  searchBtn.on("click", async function () {
+    const searchTerm = $("#customerSearchInput").val().trim().toLowerCase();
     const invoices = (await fetchAllInvoices()).invoices;
     const filteredInvoices = invoices.filter((invoice) =>
       invoice.customer_name.toLowerCase().includes(searchTerm)
@@ -184,110 +197,3 @@ function searchCustomer() {
   });
 }
 searchCustomer();
-// function renderTable(data) {
-//     const tableBody = document.querySelector("#invoiceTable tbody");
-//     tableBody.innerHTML = "";
-//     data.forEach(invoice => {
-//       const row = document.createElement("tr");
-//       row.innerHTML = `
-//         <td>${invoice.id}</td>
-//         <td>${invoice.customer_name}</td>
-//         <td>${invoice.date}</td>
-//         <td>${invoice.totalAmount}</td>
-//       `;
-//       row.addEventListener("click", () => showInvoiceDetails(invoice));
-//       tableBody.appendChild(row);
-//     });
-//   }
-
-// async function fetchCustomers() {
-//   try {
-//     const response = await fetch(`${BASE_URL}clients`);
-//     const data = await response.json();
-//     return data.clients;
-//   } catch (error) {
-//     console.error("Error fetching customers:", error);
-//     return []; // Return an empty array or handle the error accordingly
-//   }
-// }
-
-// const customers = await fetchCustomers();
-// console.log(customers);
-
-// Sample data for demonstration
-// const customers = [
-//   {
-//     id: 1,
-//     name: "John Doe",
-//     phone: "123-456-7890",
-//     address: "123 Main St",
-//   },
-//   {
-//     id: 2,
-//     name: "Jane Smith",
-//     phone: "456-789-0123",
-//     address: "456 Elm St",
-//   },
-// ];
-
-// const invoices = [
-//   {
-//     id: 1,
-//     customer_id: 1,
-//     customer_name: "John Doe",
-//     date: "2024-03-01",
-//     totalAmount: 100,
-//     discount: 10,
-//     afterDiscount: 90,
-//     items: [
-//       { name: "Item 1", price: 10, quantity: 2, total_price: 20 },
-//       { name: "Item 2", price: 20, quantity: 1, total_price: 20 },
-//     ],
-//   },
-//   {
-//     id: 2,
-//     customer_id: 2,
-//     customer_name: "Jane Smith",
-//     date: "2024-03-02",
-//     totalAmount: 150,
-//     discount: 15,
-//     afterDiscount: 135,
-//     items: [
-//       { name: "Item 3", price: 30, quantity: 3, total_price: 90 },
-//       { name: "Item 4", price: 15, quantity: 2, total_price: 30 },
-//     ],
-//   },
-// ];
-
-// // Populate the table with invoice data
-// const tableBody = document.querySelector("#invoiceTable tbody");
-// invoices.forEach((invoice) => {
-//   const row = document.createElement("tr");
-//   row.innerHTML = `
-//         <td>${invoice.id}</td>
-//         <td>${invoice.customer_name}</td>
-//         <td>${invoice.date}</td>
-//         <td>${invoice.totalAmount}</td>
-//       `;
-//   row.addEventListener("click", () => showInvoiceDetails(invoice));
-//   tableBody.appendChild(row);
-// });
-
-// Function to search for a customer
-// function searchCustomer() {
-//   const searchTerm = document
-//     .getElementById("customerSearchInput")
-//     .value.trim()
-//     .toLowerCase();
-//   const filteredInvoices = invoices.filter((invoice) =>
-//     invoice.customer_name.toLowerCase().includes(searchTerm)
-//   );
-//   renderTable(filteredInvoices);
-// }
-
-// Function to search for invoices by date
-function searchInvoicesByDate() {
-  const date = document.getElementById("invoiceDateInput").value;
-  const filteredInvoices = invoices.filter((invoice) => invoice.date === date);
-  renderTable(filteredInvoices);
-}

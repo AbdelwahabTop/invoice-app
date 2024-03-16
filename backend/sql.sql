@@ -12,6 +12,7 @@ CREATE TABLE invoice (
     invoice_total DECIMAL(10, 2),
     discount DECIMAL(10, 2),
     after_discount DECIMAL(10, 2),
+    pdf_path VARCHAR(255) NULL;
     customer_id INT,
     FOREIGN KEY (customer_id) REFERENCES customer(id)
 );

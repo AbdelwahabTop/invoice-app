@@ -547,6 +547,10 @@ $config['proxy_ips'] = '';
 //   'PATCH',
 //   'DELETE'
 // ];
+$config['upload_max_size'] = 2000 * 1024;
+$config['allowed_types'] = 'pdf|doc|docx|jpg|gif|png|jpeg|JPG|PNG';
+$config['xss_clean'] = false;
+$config['x_accept_type'] = true;
 
 //Set to TRUE to enable Cross-Origin Resource Sharing (CORS) from any source domain
 // $config['allow_any_cors_domain'] = TRUE;

@@ -2,18 +2,22 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <!-- CSS -->
   <link rel="stylesheet" type="text/css" href="css/style.css" />
 
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
+  <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
 </head>
 
 <body>
   <nav>
     <ul>
+      <li id="route"><a href="#">عرض الفواتير</a></li>
       <li id="print"><a href="#">طباعة</a></li>
       <li id="create"><a href="#">إنشاء صفحة جديدة</a></li>
       <li id="add"><a href="#">إضافة عنصر جديد</a></li>
@@ -73,14 +77,12 @@
               </div>
               <!-- | -->
               <div class="cell2 clientDate">
-                <input type="text" id="datepicker" placeholder="Select Date">
+                <input type="text" id="datepicker" placeholder="Select Date" />
               </div>
-
             </div>
           </div>
         </div>
         <ul id="autocompleteResults" class="autocomplete-results"></ul>
-
 
         <div class="list">
           <!-- تصنيف القائمة ------------------------------------------------------>
@@ -116,16 +118,16 @@
               <p>1</p>
             </div>
             <div>
-              <input type="text" class="itemNameInput" placeholder="...أكتب اسم السلعة">
+              <input type="text" class="itemNameInput" placeholder="...أكتب اسم السلعة" />
             </div>
             <ul class="itemAutocomplete"></ul>
             <div contenteditable="true" class="cell3 qty">
               <p>1</p>
             </div>
-            <div contenteditable="true" class="cell4 cm">
+            <div class="cell4 cm">
               <p>00</p>
             </div>
-            <div contenteditable="true" class="cell5 meter">
+            <div class="cell5 meter">
               <p class="c1">00</p>
             </div>
             <div contenteditable="true" class="cell6 price">
@@ -208,20 +210,6 @@
   </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-<script src="scripts/main.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Get all <a> elements
-    var links = document.querySelectorAll("a");
-
-    // Add click event listener to each link
-    links.forEach(function(link) {
-      link.addEventListener("click", function(event) {
-        event.preventDefault();
-      });
-    });
-  });
-</script>
+<script type="module" src="scripts/main.js"></script>
 
 </html>

@@ -32,7 +32,10 @@ class InvoiceModel extends CI_Model
             'id' => $invoiceDetails[0]['id'],
             'customer_id' => $invoiceDetails[0]['customer_id'],
             'customer_name' => $invoiceDetails[0]['customer_name'],
+            'customer_phone' => $invoiceDetails[0]['customer_phone'],
+            'customer_address' => $invoiceDetails[0]['customer_address'],
             'date' => $invoiceDetails[0]['invoice_date'],
+            'invoice_number' => $invoiceDetails[0]['invoice_number'],
             'totalAmount' => $invoiceDetails[0]['invoice_total'],
             'discount' => $invoiceDetails[0]['discount'],
             'afterDiscount' => $invoiceDetails[0]['after_discount'],
@@ -66,8 +69,21 @@ class InvoiceModel extends CI_Model
         }
     }
 
+    public function getInvoiceByNumber($invoice_number)
+    {
+        $this->db->where('invoice_number', $invoice_number);
+        $query = $this->db->get('invoice');
+        return $query->result_array();
+    }
+
     public function insert($data)
     {
         $this->db->insert('invoice', $data);
+    }
+
+    public function update($data, $invoice_id)
+    {
+        $this->db->where('id', $invoice_id);
+        $this->db->update('invoice', $data);
     }
 }

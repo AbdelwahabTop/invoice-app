@@ -16,3 +16,4 @@ backend/application/libraries/vendor/composer/installed.php
 backend/application/libraries/vendor/composer/InstalledVersions.php
 backend/application/libraries/vendor/composer/LICENSE
 backend/application/libraries/vendor/composer/platform_check.php
+frontend/node_modules

@@ -1,7 +1,7 @@
 <?php
 
-$route['default_controller'] = 'LionInvoices/getClient';
-$route['post'] = 'LionInvoices/insert';
+// $route['default_controller'] = 'LionInvoices/getClient';
+$route['post']['post'] = 'LionInvoices/insert';
 $route['get_client_by_name']['get'] = 'LionInvoices/getClientsByName';
 $route['get_client_by_id/(:num)']['get'] = 'LionInvoices/getClientById/$1';
 $route['get_items']['get'] = 'LionInvoices/getItems';

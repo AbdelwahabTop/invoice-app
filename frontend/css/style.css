@@ -226,6 +226,7 @@ nav ul li a:hover {
   padding-left: 4px;
   padding-right: 4px;
   border-bottom: 1px dotted #b7b5b5;
+  /* margin-right: 0px; */
 }
 
 .navl .cell1 {
@@ -672,11 +673,11 @@ nav ul li a:hover {
 }
 
 /* print option ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-
+/* 
 @media print {
   html,
   body {
-    width: 210mm;
+    width: 250mm;
     height: 297mm;
   }
   .page {
@@ -688,6 +689,11 @@ nav ul li a:hover {
     box-shadow: initial;
     background: always;
     page-break-after: always;
+  }
+
+  .clientName,
+  .itemNameInput {
+    margin-right: 50px;
   }
 
   .message {
@@ -725,7 +731,7 @@ nav ul li a:hover {
     border-left: 1px solid black;
     background-color: transparent;
   }
-}
+} */
 
 .footer {
   margin-top: 10px;

@@ -27,4 +27,10 @@ class ItemsModel extends CI_Model
         $query = $this->db->get('items');
         return $query->result_array();
     }
+
+    public function deleteItems($invoice_id)
+    {
+        $this->db->where('invoice_id', $invoice_id);
+        $this->db->delete('items');
+    }
 }
