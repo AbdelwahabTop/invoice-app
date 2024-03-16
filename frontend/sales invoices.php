@@ -42,10 +42,11 @@
                 <p>حضرة السيد</p>
               </div>
               <!-- | -->
-              <div class="name-num">
-                <input type="text" id="NAME" class="cell2 clientName" placeholder="....أكتب اسم العميل الثلاثي" />
-                <input type="text" id="PHONE" class="clientPhone" placeholder="أدخل رقم الهاتف..." />
+              <input type="text" id="NAME" class="cell2 clientName" placeholder="....أكتب اسم العميل الثلاثي" />
+              <div class="cell1">
+                <p>الهاتف</p>
               </div>
+              <input type="text" id="PHONE" class="clientPhone" placeholder="أدخل رقم الهاتف..." />
             </div>
 
             <div class="row">

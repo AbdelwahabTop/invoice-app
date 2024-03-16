@@ -97,11 +97,12 @@ function createNewPage(num) {
           <p>حضرة السيد</p>
         </div>
         <!-- | -->
-        <div class="name-num">
           <input readonly value="${CUSTOMER_NAME.value}" type="text" class="cell2 clientName auto-name" placeholder="....أكتب اسم العميل الثلاثي" />
+          <div class="cell1">
+            <p>الهاتف</p>
+          </div>
           <input readonly value="${CUSTOMER_PHONE.value}" type="text" class="clientPhone auto-phone" placeholder="أدخل رقم الهاتف..." />
         </div>
-      </div>
 
       <div class="row">
         <div class="cell1">
@@ -128,7 +129,11 @@ function createNewPage(num) {
         </div>
 
         <div class="row">
-          <div class="cell1"><p>التاريخ</p></div>
+          <div class="cell1">
+            <p>
+              التاريخ
+            </p>
+          </div>
           <!-- | -->
           <div class="cell2 auto-date"><p>${INVOICE_DATE.value}</p></div>
         </div>
@@ -463,6 +468,20 @@ saveBTN.addEventListener("click", async () => {
   document.querySelector(".book").style.height = "auto";
   document.querySelector(".book").style.margin = "auto";
 
+  if (!shouldInvokeFunction(urlParams)) {
+    const originalDateInput = document.querySelector(
+      ".navl .row:nth-child(2) .clientDate input"
+    );
+    const invoiceDateValue = originalDateInput.value;
+    const newDateDiv = document.createElement("div");
+    newDateDiv.classList.add("cell2", "auto-date");
+    const newDateParagraph = document.createElement("p");
+    newDateParagraph.textContent = invoiceDateValue;
+    newDateDiv.appendChild(newDateParagraph);
+    const parentElement = originalDateInput.parentElement;
+    parentElement.replaceChild(newDateDiv, originalDateInput);
+  }
+  
   html2canvas(document.querySelector(".book"), {
     scale: 1,
     allowTaint: true,

@@ -20,11 +20,11 @@ input {
 .autocomplete-results {
   position: absolute;
   margin-top: -30px;
-  margin-left: 340px;
+  margin-left: 410px;
   border: 2px solid #d4cabb;
   border-top: none;
   z-index: 99;
-  width: 17%;
+  width: 13.7%;
   max-height: 280px;
   overflow-y: auto;
   background-color: #fff;
@@ -189,28 +189,23 @@ nav ul li a:hover {
 .clientName {
   padding-left: 6px;
   padding-right: 6px;
-  width: 65%;
+  width: 50%;
   text-align: right;
   font-family: Cairo;
   font-weight: bold;
   font-size: 12px;
-  border-left: 1px solid #432e21;
-  /* margin-right: 50px; */
-  /* flex: 1; */
 }
 
 .clientPhone {
-  /* margin-right: 10px; */
-  width: 39%;
+  width: 35%;
   text-align: right;
   font-family: Cairo;
   font-size: 12px;
-  border-right: 1px solid #432e21;
 }
 
 .clientAddress {
   margin-right: 10px;
-  width: 75%;
+  width: 107%;
   text-align: right;
   font-family: Cairo;
   font-size: 12px;
