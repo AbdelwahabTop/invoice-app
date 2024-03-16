@@ -468,10 +468,12 @@ saveBTN.addEventListener("click", async () => {
   document.querySelector(".book").style.height = "auto";
   document.querySelector(".book").style.margin = "auto";
 
-  if (!shouldInvokeFunction(urlParams)) {
-    const originalDateInput = document.querySelector(
-      ".navl .row:nth-child(2) .clientDate input"
-    );
+  if (
+    !shouldInvokeFunction(urlParams) &&
+    document.getElementById("datepicker")
+  ) {
+    const originalDateInput = document.getElementById("datepicker");
+    console.log(originalDateInput);
     const invoiceDateValue = originalDateInput.value;
     const newDateDiv = document.createElement("div");
     newDateDiv.classList.add("cell2", "auto-date");
@@ -481,7 +483,7 @@ saveBTN.addEventListener("click", async () => {
     const parentElement = originalDateInput.parentElement;
     parentElement.replaceChild(newDateDiv, originalDateInput);
   }
-  
+
   html2canvas(document.querySelector(".book"), {
     scale: 1,
     allowTaint: true,
@@ -508,6 +510,8 @@ saveBTN.addEventListener("click", async () => {
 
     const formData = new FormData();
     formData.append("pdfFile", pdfData);
+
+    // revert the styling back
     document
       .querySelectorAll(".itemNameInput, .clientName")
       .forEach((input) => {
@@ -564,11 +568,15 @@ saveBTN.addEventListener("click", async () => {
         },
       })
       .then((response) => {
-        getLastInvoiceNumber();
+        // getLastInvoiceNumber();
       })
       .catch((error) => {
         console.error("Error:", error);
       });
+
+    if (!shouldInvokeFunction(urlParams)) {
+      getLastInvoiceNumber();
+    }
   });
 });
 ////////////////////////////////////////////////////////////////
