@@ -1,3 +1,5 @@
+const BASE_URL = "http://localhost/files/backend/";
+
 document.addEventListener("DOMContentLoaded", function () {
   var links = document.querySelectorAll("a");
 
@@ -48,7 +50,6 @@ function handleFunctionInvocation(params) {
 const urlParams = parseURLParams();
 handleFunctionInvocation(urlParams);
 
-const BASE_URL = "http://localhost/files/backend/";
 const CUSTOMER_NAME = document.getElementById("NAME");
 const CUSTOMER_ADDRESS = document.getElementById("ADDRESS");
 const CUSTOMER_PHONE = document.getElementById("PHONE");
