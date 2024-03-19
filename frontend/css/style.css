@@ -47,6 +47,10 @@ ul {
   width: 100%;
 }
 
+.selected {
+  background-color: #f2f2f2;
+}
+
 .autocompleteOption:hover {
   background-color: #f2f2f2;
 }
@@ -195,6 +199,7 @@ nav ul li a:hover {
   font-weight: bold;
   font-size: 12px;
   margin-left: 5px;
+  direction: rtl;
 }
 
 .clientPhone {
@@ -222,6 +227,8 @@ nav ul li a:hover {
   padding-left: 4px;
   padding-right: 4px;
   border-bottom: 1px dotted #b7b5b5;
+  direction: rtl;
+
   /* margin-right: 0px; */
 }
 

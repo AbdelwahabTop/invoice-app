@@ -587,6 +587,9 @@ const autocompleteResults = document.querySelectorAll(".autocomplete-results");
 setupCustomerAutocomplete(customerNameInput[0], autocompleteResults[0]);
 
 function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
+  let selectedIndex = -1; // Track the selected index
+  let data = null;
+
   customerNameInput.addEventListener("input", function () {
     const query = this.value.trim();
 
@@ -596,7 +599,8 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
     }
     fetch(`${BASE_URL}get_client_by_name/?query=${query}`)
       .then((response) => response.json())
-      .then((data) => {
+      .then((responseData) => {
+        data = responseData;
         const results = data.results;
         autocompleteResults.innerHTML = "";
         if (results.length !== 0) {
@@ -604,27 +608,71 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
         } else {
           autocompleteResults.style.display = "none";
         }
+        selectedIndex = -1; // Reset selected index
         results.forEach((customer, i) => {
           const option = document.createElement("li");
           option.textContent = customer.customer_name;
           option.classList.add("autocompleteOption");
           option.addEventListener("click", function () {
-            // customerNameInput.value = customer.customer_name;
-            document.querySelectorAll(".clientName").forEach((ele) => {
-              ele.value = customer.customer_name;
-            });
-            document.querySelectorAll(".clientAddress").forEach((ele) => {
-              ele.innerText = customer.customer_address || " ";
-            });
-            document.querySelectorAll(".clientPhone").forEach((ele) => {
-              ele.value = customer.customer_phone || " ";
-            });
-            autocompleteResults.innerHTML = "";
+            selectCustomer(customer);
           });
           autocompleteResults.appendChild(option);
         });
       });
   });
+
+  // Keyboard navigation
+  customerNameInput.addEventListener("keydown", function (event) {
+    if (event.key === "ArrowDown") {
+      selectedIndex = Math.min(
+        selectedIndex + 1,
+        autocompleteResults.children.length - 1
+      );
+      updateSelection();
+    } else if (event.key === "ArrowUp") {
+      selectedIndex = Math.max(selectedIndex - 1, -1);
+      updateSelection();
+    } else if (event.key === "Enter" && selectedIndex !== -1) {
+      const selectedOption = autocompleteResults.children[selectedIndex];
+      if (selectedOption) {
+        const customerName = selectedOption.textContent;
+        const customer = findCustomerByName(customerName);
+        if (customer) {
+          selectCustomer(customer);
+        }
+      }
+    }
+  });
+
+  function updateSelection() {
+    const options = autocompleteResults.querySelectorAll(".autocompleteOption");
+    options.forEach((option, index) => {
+      if (index === selectedIndex) {
+        option.classList.add("selected");
+        option.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      } else {
+        option.classList.remove("selected");
+      }
+    });
+  }
+
+  function findCustomerByName(name) {
+    return data.results.find((customer) => customer.customer_name === name);
+  }
+
+  function selectCustomer(customer) {
+    document.querySelectorAll(".clientName").forEach((ele) => {
+      ele.value = customer.customer_name;
+    });
+    document.querySelectorAll(".clientAddress").forEach((ele) => {
+      ele.innerText = customer.customer_address || " ";
+    });
+    document.querySelectorAll(".clientPhone").forEach((ele) => {
+      ele.value = customer.customer_phone || " ";
+    });
+    autocompleteResults.innerHTML = "";
+    autocompleteResults.style.display = "none";
+  }
 
   // Close dropdown when clicking outside
   document.addEventListener("click", function (event) {
@@ -637,6 +685,7 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
     }
   });
 }
+
 ////////////////////////////////////////////////////////////////////////
 // Dynamic Date
 const currentDate = new Date();
@@ -691,12 +740,14 @@ const itemAutocompletes = document.querySelectorAll(".itemAutocomplete");
 const itemPrice = document.querySelector(".listinfo .cell6");
 
 attachAutocompleteListener(itemNameInputs[0], itemAutocompletes[0], itemPrice);
-
 function attachAutocompleteListener(
   itemNameInput,
   itemAutocomplete,
   itemPrice
 ) {
+  let selectedIndex = -1; // Track the selected index
+  let results = null; // Declare data variable
+
   itemNameInput.addEventListener("input", function () {
     const query = this.value.trim();
     if (query.length === 0) {
@@ -706,7 +757,9 @@ function attachAutocompleteListener(
 
     fetch(`${BASE_URL}get_items/?query=${query}`)
       .then((response) => response.json())
-      .then((data) => {
+      .then((responseData) => {
+        const data = responseData; // Store data in the outer scope
+        results = data.items;
         const items = data.items;
         const uniqueItemNames = getUniqueItemNames(items);
 
@@ -715,8 +768,9 @@ function attachAutocompleteListener(
         } else {
           itemAutocomplete.style.display = "none";
         }
+        selectedIndex = -1; // Reset selected index
         itemAutocomplete.innerHTML = "";
-        uniqueItemNames.forEach((item) => {
+        uniqueItemNames.forEach((item, index) => {
           const option = document.createElement("div");
           option.textContent = item;
           option.classList.add("autocompleteOption");
@@ -724,12 +778,50 @@ function attachAutocompleteListener(
             itemNameInput.value = item;
             itemAutocomplete.innerHTML = "";
             itemAutocomplete.style.display = "none";
-            itemPrice.innerText = getLastInsertedItemPrice(items, item);
+            itemPrice.innerText = getLastInsertedItemPrice(results, item);
             calculateRowTotalPrice(itemNameInput.parentElement.parentElement);
           });
           itemAutocomplete.appendChild(option);
         });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
+  });
+
+  // Handle keyboard navigation
+  itemNameInput.addEventListener("keydown", function (event) {
+    const itemResults = document.querySelectorAll(".autocompleteOption");
+    if (itemResults.length === 0) return;
+
+    if (event.key === "ArrowDown") {
+      selectedIndex = Math.min(selectedIndex + 1, itemResults.length - 1);
+    } else if (event.key === "ArrowUp") {
+      selectedIndex = Math.max(selectedIndex - 1, 0);
+    } else if (event.key === "Enter") {
+      const selectedOption = document.querySelector(
+        ".autocompleteOption.selected"
+      );
+      if (selectedOption) {
+        const selectedItem = selectedOption.textContent;
+        itemNameInput.value = selectedItem;
+        itemAutocomplete.innerHTML = "";
+        itemAutocomplete.style.display = "none";
+        itemPrice.innerText = getLastInsertedItemPrice(results, selectedItem);
+        calculateRowTotalPrice(itemNameInput.parentElement.parentElement);
+        selectedIndex = -1;
+      }
+      return;
+    }
+
+    itemResults.forEach((option, index) => {
+      if (index === selectedIndex) {
+        option.classList.add("selected");
+        option.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      } else {
+        option.classList.remove("selected");
+      }
+    });
   });
 
   // Close dropdown when clicking outside
@@ -743,4 +835,5 @@ function attachAutocompleteListener(
     }
   });
 }
+
 /////////////////////////////////////////////////////////////////////////////
