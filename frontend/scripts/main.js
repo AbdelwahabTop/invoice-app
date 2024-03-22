@@ -21,6 +21,9 @@ document.getElementById("reset").addEventListener("click", function () {
 document.getElementById("route").addEventListener("click", function () {
   window.location.href = "http://localhost/files/frontend/data.html";
 });
+document.getElementById("report-page").addEventListener("click", function () {
+  window.location.href = "http://localhost/files/frontend/time.html";
+});
 
 function parseURLParams() {
   const queryParams = new URLSearchParams(window.location.search);
@@ -836,5 +839,5 @@ function attachAutocompleteListener(
     }
   });
 }
-
 /////////////////////////////////////////////////////////////////////////////
+///////////////////////////////التقرير المالي//////////////////////////////////////

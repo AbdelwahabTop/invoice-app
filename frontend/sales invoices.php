@@ -18,6 +18,7 @@
   <nav>
     <ul>
       <li id="route"><a href="#">عرض الفواتير</a></li>
+      <li id="report-page"><a href="#">التقرير المالي</a></li>
       <li id="print"><a href="#">طباعة</a></li>
       <li id="create"><a href="#">إنشاء صفحة جديدة</a></li>
       <li id="add"><a href="#">إضافة عنصر جديد</a></li>

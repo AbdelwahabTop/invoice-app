@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الفواتير بين تواريخ</title>
+    <link rel="stylesheet" href="css/time.css" />
+    <style type="text/css" media="print">
+      .no-print {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="no-print">
+      <ul>
+        <li id="route"><a href="#">عرض الفواتير</a></li>
+        <li id="print"><a href="#" onclick="print()">طباعة</a></li>
+        <li id="reset"><a href="#">إعادة تعيين</a></li>
+        <li id="save"><button class="back">الرجوع</button></li>
+      </ul>
+    </nav>
+    <div class="container no-print">
+      <div class="navl">
+        <div class="row first">
+          <div class="cell1">
+            <p>تاريخ البداية</p>
+          </div>
+          <div class="cell2 clientDate">
+            <input
+              type="date"
+              id="date1"
+              lang="ar"
+              placeholder="اختر التاريخ" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="cell1">
+            <p>تاريخ النهاية</p>
+          </div>
+          <div class="cell2">
+            <input
+              type="date"
+              id="date2"
+              placeholder="اختر التاريخ" />
+          </div>
+        </div>
+
+        <button id="submitBtn">تقرير</button>
+      </div>
+
+      </div>
+    </div>
+    <div class="book">
+      <div class="page" id="contentToPrint">
+        <div class="header"></div>
+
+        <div class="center">
+          <h1>&nbsp;</h1>
+
+          <div class="list">
+            <div class="row">
+              <div class="cell0">
+                <p>ت</p>
+              </div>
+              <div class="report-coll">
+                <p>رقم الفاتورة</p>
+              </div>
+              <div class="report-coll coll2">
+                <p>التاريخ</p>
+              </div>
+              <div class="report-coll coll3">
+                <p>سعر الفاتورة بعد الخصم</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="listinfo open" id="itemContainer">
+
+          </div>
+        </div>
+
+        <div class="footer">
+          <div class="price">
+
+
+            <div class="navl">
+              <div class="row">
+                <div class="cell1">
+                  <p>مجموع القائمة</p>
+                </div>
+                <!-- | -->
+                <div class="cell2 total">
+                  <p>&nbsp;</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="scripts/time.js"></script>
+  </body>
+</html>

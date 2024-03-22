@@ -154,4 +154,15 @@ class LionInvoices extends CI_Controller
             echo json_encode(['success' => false, 'message' => 'Invalid items data']);
         }
     }
+
+    public function get_invoices_between_dates()
+    {
+        $start_date = $this->input->get('start_date');
+        $end_date = $this->input->get('end_date');
+
+        $invoices = $this->InvoiceModel->get_invoices_between_dates($start_date, $end_date);
+
+        $this->output->set_content_type('application/json');
+        $this->output->set_output(json_encode($invoices));
+    }
 }

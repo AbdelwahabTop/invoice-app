@@ -10,3 +10,5 @@ $route['get_last_invoice']['get'] = 'LionInvoices/getLastInvoice';
 $route['get_invoice_details/(:num)']['get'] = 'LionInvoices/getInvoiceDetails/$1';
 $route['invoices']['get'] = 'LionInvoices/getAllInvoices';
 $route['clients']['get'] = 'LionInvoices/getAllClients';
+
+$route['get_invoices_between_dates']['get'] = 'LionInvoices/get_invoices_between_dates';
