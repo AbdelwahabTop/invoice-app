@@ -10,10 +10,10 @@ body {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
-input {
+/* input {
   border: none;
   margin-inline: 2px;
-}
+} */
 
 /* Navbar section */
 nav {
@@ -37,34 +37,44 @@ nav ul li {
   font-size: 20px;
 }
 
-nav ul li a {
+.active a {
   display: inline-block;
   padding: 10px 20px; /* Add padding to each link */
   color: #fff; /* Set the text color of links */
   text-decoration: none; /* Remove underline from links */
 }
 
-nav ul li a:hover {
+.active a:hover {
   background-color: #555; /* Change background color on hover */
 }
 
+.no-active a {
+  display: inline-block;
+  padding: 10px 20px; /* Add padding to each link */
+  color: #716d6d; /* Set the text color of links */
+  text-decoration: none; /* Remove underline from links */
+  cursor: none;
+}
+
 #save button {
-  padding: 12px 24px;
-  background-color: #4caf50;
+  padding: 8px 20px;
+  font-family: "Cairo";
+  background-color: #779d77;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
+  cursor: none;
 }
 
-#save button:hover {
+/* #save button:hover {
   background-color: #45a049;
 }
 
 #save button:active {
   background-color: #3e8e41;
-}
+} */
 
 .page {
   width: 210mm;
@@ -424,6 +434,20 @@ input[type="date"] {
       format("truetype"),
     /* Safari, Android, iOS */ url("../fonts/cairo-v20-latin-regular.svg#Cairo")
       format("svg"); /* Legacy iOS */
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 10mm auto;
+  border: 1px #d3d3d3 solid;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 @media print {

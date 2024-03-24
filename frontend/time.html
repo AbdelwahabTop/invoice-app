@@ -14,42 +14,47 @@
   <body>
     <nav class="no-print">
       <ul>
-        <li id="route"><a href="#">عرض الفواتير</a></li>
-        <li id="print"><a href="#" onclick="print()">طباعة</a></li>
-        <li id="reset"><a href="#">إعادة تعيين</a></li>
-        <li id="save"><button class="back">الرجوع</button></li>
+        <li id="main-page" class="active"><a href="#">إِنشاء فاتورة</a></li>
+        <li id="route" class="active"><a href="#">عرض الفواتير</a></li>
+        <li id="report-page" class="active"><a href="#" style="color: #84f087;">التقرير المالي</a></li>  
+        <li id="reset" class="active"><a href="#">إعادة تعيين</a></li>
+        <li id="print" class="active"><a href="#" onclick="print()">طباعة</a></li>
+        <li id="create" class="no-active"><a href="#">إنشاء صفحة جديدة</a></li>
+        <li id="add" class="no-active"><a href="#">إضافة عنصر جديد</a></li>
+        <!-- <li id="save"><a href="#">حفظ</a></li> -->
+        <li id="save"><button>حفظ</button></li>
+        <!-- <li id="save"><button class="back">الرجوع</button></li> -->
       </ul>
     </nav>
     <div class="container no-print">
       <div class="navl">
-        <div class="row first">
-          <div class="cell1">
-            <p>تاريخ البداية</p>
+          <div class="row first">
+            <div class="cell1">
+              <p>تاريخ البداية</p>
+            </div>
+            <div class="cell2 clientDate">
+              <input
+                type="date"
+                id="date1"
+                lang="ar"
+                placeholder="اختر التاريخ" />
+            </div>
           </div>
-          <div class="cell2 clientDate">
-            <input
-              type="date"
-              id="date1"
-              lang="ar"
-              placeholder="اختر التاريخ" />
+
+          <div class="row">
+            <div class="cell1">
+              <p>تاريخ النهاية</p>
+            </div>
+            <div class="cell2">
+              <input
+                type="date"
+                id="date2"
+                placeholder="اختر التاريخ" />
+            </div>
           </div>
+
+          <button id="submitBtn">تقرير</button>
         </div>
-
-        <div class="row">
-          <div class="cell1">
-            <p>تاريخ النهاية</p>
-          </div>
-          <div class="cell2">
-            <input
-              type="date"
-              id="date2"
-              placeholder="اختر التاريخ" />
-          </div>
-        </div>
-
-        <button id="submitBtn">تقرير</button>
-      </div>
-
       </div>
     </div>
     <div class="book">

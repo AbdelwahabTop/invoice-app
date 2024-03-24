@@ -20,7 +20,7 @@ input {
 .autocomplete-results {
   position: absolute;
   margin-top: -30px;
-  margin-left: 410px;
+  margin-left: 415px;
   border: 2px solid #d4cabb;
   border-top: none;
   z-index: 99;
@@ -656,7 +656,8 @@ nav ul li a:hover {
   content: "Close";
 }
 #save button {
-  padding: 12px 24px;
+  padding: 8px 20px;
+  font-family: "Cairo";
   background-color: #4caf50;
   color: white;
   border: none;
@@ -674,6 +675,13 @@ nav ul li a:hover {
 }
 
 /* print option ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+@media print {
+  html,
+  body {
+    background-color: white;
+    margin-top: 30px;
+  }
+}
 /* 
 @media print {
   html,

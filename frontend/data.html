@@ -4,124 +4,72 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invoices and Customers</title>
-    <link rel="stylesheet" href="css/data.css" />
     <link
-      rel="stylesheet"
-      href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
-
+    rel="stylesheet"
+    href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+   
+    <!-- DataTables Buttons extension CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <!-- DataTables Buttons extension JavaScript -->
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+
+
+    
+    <link rel="stylesheet" href="css/data.css" />
     <script src="scripts/data.js"></script>
-
-    <style>
-      .top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-      .top button {
-        margin-bottom: 30px;
-      }
-      input[type="search"],
-      .dataTables_length select {
-        margin-bottom: 15px; /* Add margin bottom to search box and entry box */
-      }
-
-      .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-      }
-
-      .close {
-        color: #aaa;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
-      }
-
-      #go-to-main,
-      .back {
-        padding: 10px 20px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-      }
-
-      #go-to-main:hover,
-      .back:hover {
-        background-color: #45a049;
-      }
-
-      .items-title {
-        margin-top: 20px;
-        font-size: 22px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        color: #333;
-      }
-
-      .invoice-details {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: flex-start;
-        width: 100%;
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-      }
-
-      /* Flex items */
-      .invoice-details p {
-        flex: 0 0 calc(33.33% - 20px);
-        margin: 10px 0;
-        padding: 5px;
-        text-align: right;
-      }
-
-      /* Label styling */
-      .detail-label {
-        font-weight: bold;
-        font-size: 18px;
-        color: #333;
-      }
-
-      /* Content styling */
-      #invoiceID,
-      #customerName,
-      #customerPhone,
-      #customerAddress,
-      #invoiceDate,
-      #totalAmount,
-      #discount,
-      #afterDiscount {
-        color: #666;
-        font-size: 18px;
-      }
-    </style>
   </head>
   <body>
-    <div class="top">
-      <h1>الفواتير والعملاء</h1>
-      <button class="back">الرجوع</button>
+    <nav>
+      <ul>
+        <li id="main-page" class="active"><a href="#" class="">إِنشاء فاتورة</a></li>
+        <li id="route" class="active"><a href="#" style="color: #84f087;">عرض الفواتير</a></li>
+        <li id="report-page" class="active"><a href="#">التقرير المالي</a></li>
+        <li id="reset" class="active"><a href="#">إعادة تعيين</a></li>
+        <li id="print" class="no-active"><a href="#">طباعة</a></li>
+        <li id="create" class="no-active"><a href="#">إنشاء صفحة جديدة</a></li>
+        <li id="add" class="no-active"><a href="#">إضافة عنصر جديد</a></li>
+        <!-- <li id="save"><a href="#">حفظ</a></li> -->
+        <li id="save"><button>حفظ</button></li>
+      </ul>
+    </nav>
+    <div class="container-btn no-print">
+      <div class="navl">
+          <div class="row first">
+            <div class="cell1">
+              <p>تاريخ البداية</p>
+            </div>
+            <div class="cell2 clientDate">
+              <input
+                type="date"
+                id="date1"
+                lang="ar"
+                placeholder="اختر التاريخ" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="cell1">
+              <p>تاريخ النهاية</p>
+            </div>
+            <div class="cell2">
+              <input
+                type="date"
+                id="date2"
+                placeholder="اختر التاريخ" />
+            </div>
+          </div>
+
+          <button id="Date" class="submitBtn">بحث</button>
+        </div>
+      </div>
     </div>
-    <div class="container">
-      <table id="invoiceTable" class="display">
+    <div class="container-table">
+      <table id="invoiceTable" class="display nowrap">
         <thead>
           <tr>
             <th>رقم الفاتورة</th>
@@ -139,11 +87,11 @@
         <div class="modal-content">
           <div class="modal-header">
             <span class="close">&times;</span>
+            <h2 class="modal-title">تفاصيل الفاتورة</h2>
             <button id="go-to-main" class="print-link">
               اعادة طباعة الفاتورة
             </button>
           </div>
-          <h2 class="modal-title">تفاصيل الفاتورة</h2>
           <div class="invoice-details">
             <p>
               <span class="detail-label">رقم الفاتورة:</span>
@@ -181,7 +129,7 @@
               <span id="afterDiscount"></span>
             </p>
           </div>
-          <h3 class="items-title">السلع</h3>
+          <!-- <h3 class="items-title">السلع</h3> -->
           <table id="itemsTable" class="display">
             <thead>
               <tr>

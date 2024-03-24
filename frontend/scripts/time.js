@@ -15,11 +15,14 @@ document.getElementById("submitBtn").addEventListener("click", function () {
 document.getElementById("route").addEventListener("click", function () {
   window.location.href = "http://localhost/files/frontend/data.html";
 });
-document.querySelector(".back").addEventListener("click", function () {
-  window.location.href = "http://localhost/files/frontend/sales invoices.php";
-});
+// document.querySelector(".back").addEventListener("click", function () {
+//   window.location.href = "http://localhost/files/frontend/sales invoices.php";
+// });
 document.getElementById("reset").addEventListener("click", function () {
   window.location.href = "http://localhost/files/frontend/time.html";
+});
+document.getElementById("main-page").addEventListener("click", function () {
+  window.location.href = "http://localhost/files/frontend/sales invoices.php";
 });
 
 function fetchInvoicesBetweenDates(date1, date2) {
@@ -44,7 +47,13 @@ function displayInvoices(invoices) {
     .querySelector(`#itemContainer`);
 
   if (invoices.length === 0) {
-    parent.textContent = "لا توجد فواتير بين التواريخ المحددة.";
+    parent.textContent = "لا توجد فواتير بين التواريخ المحددة";
+    parent.style.textAlign = "center";
+    parent.style.fontSize = "30px";
+    parent.style.fontWeight = "bold";
+    parent.style.marginTop = "30px";
+    parent.style.color = "red";
+    parent.style.fontFamily = "Cairo";
     return;
   }
 

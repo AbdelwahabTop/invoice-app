@@ -89,8 +89,9 @@ class InvoiceModel extends CI_Model
 
     public function get_invoices_between_dates($start_date, $end_date)
     {
-        $this->db->select('*');
+        $this->db->select('invoice.*, customer.customer_name, customer.customer_phone, customer.customer_address');
         $this->db->from('invoice');
+        $this->db->join('customer', 'invoice.customer_id = customer.id');
         $this->db->where('invoice_date >=', $start_date);
         $this->db->where('invoice_date <=', $end_date);
         $query = $this->db->get();

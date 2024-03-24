@@ -14,8 +14,13 @@ function closeModal() {
 }
 
 $(document).ready(function () {
-  $(".back").on("click", function () {
+  $("#main-page").on("click", function () {
     window.location.href = "http://localhost/files/frontend/sales invoices.php";
+  });
+});
+$(document).ready(function () {
+  $("#report-page").on("click", function () {
+    window.location.href = "http://localhost/files/frontend/time.html";
   });
 });
 
@@ -101,7 +106,6 @@ async function renderTable(invoices) {
     if (!invoices) {
       invoices = (await fetchAllInvoices()).invoices;
     }
-
     const invoiceTable = $("#invoiceTable").DataTable();
     invoiceTable.clear().draw();
     invoices.forEach(async (invoice) => {
@@ -136,64 +140,45 @@ $(".close").on("click", function () {
 
 renderTable();
 
-function searchAutoComplete() {
-  const search = $("#customerSearchInput");
-  const searchResults = $(".search-results");
+$(document).ready(function () {
+  $("#Date").on("click", function () {
+    const date1 = $("#date1").val();
+    const date2 = $("#date2").val();
 
-  search.on("input", function () {
-    const query = $(this).val().trim();
+    fetchInvoicesBetweenDates(date1, date2)
+      .then((invoices) => {
+        const invoiceTable = $("#invoiceTable").DataTable();
+        invoiceTable.clear().draw();
+        invoices.forEach(async (invoice) => {
+          const row = invoiceTable.row
+            .add([
+              invoice.invoice_number,
+              invoice.customer_name,
+              invoice.invoice_date,
+              invoice.after_discount,
+            ])
+            .draw(false)
+            .node();
 
-    if (query.length === 0) {
-      searchResults.html("");
-      return;
-    }
-
-    fetch(`${BASE_URL}get_client_by_name/?query=${query}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const results = data.results;
-        searchResults.html("");
-        if (results.length !== 0) {
-          searchResults.css("display", "block");
-        } else {
-          searchResults.css("display", "none");
-        }
-        results.forEach((customer, i) => {
-          const option = $('<li class="search-autocomplete"></li>').text(
-            customer.customer_name
-          );
-          option.on("click", function () {
-            search.val(customer.customer_name);
-            searchResults.html("");
+          $(row).on("click", function () {
+            showInvoiceDetails(invoice.id);
           });
-          searchResults.append(option);
         });
+      })
+      .catch((error) => {
+        console.error("Error fetching invoices:", error);
       });
   });
 
-  // Close dropdown when clicking outside
-  $(document).on("click", function (event) {
-    if (
-      !$(event.target).closest(".search-results") &&
-      event.target !== search[0]
-    ) {
-      searchResults.html("");
-      searchResults.css("display", "none");
-    }
-  });
-}
-
-searchAutoComplete();
-
-function searchCustomer() {
-  const searchBtn = $("#searchBtn");
-  searchBtn.on("click", async function () {
-    const searchTerm = $("#customerSearchInput").val().trim().toLowerCase();
-    const invoices = (await fetchAllInvoices()).invoices;
-    const filteredInvoices = invoices.filter((invoice) =>
-      invoice.customer_name.toLowerCase().includes(searchTerm)
-    );
-    renderTable(filteredInvoices);
-  });
-}
-searchCustomer();
+  function fetchInvoicesBetweenDates(date1, date2) {
+    return $.ajax({
+      url: `${BASE_URL}get_invoices_between_dates`,
+      method: "GET",
+      data: {
+        start_date: date1,
+        end_date: date2,
+      },
+      dataType: "json",
+    });
+  }
+});
