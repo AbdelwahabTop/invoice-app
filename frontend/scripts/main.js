@@ -398,7 +398,7 @@ function generateItemRow(colNum, quantity, price, totalPrice, itemName) {
     <div class="cell7 total-price"><p>${totalPrice}</p></div>
     <div class="cell8 delete">
     <i class="fa-solid fa-trash-can" style="color: #f20d0d;"></i>            
-   </div>
+  </div>
   </div>`;
 
   // Create a temporary div element to attach the new row
@@ -550,6 +550,7 @@ function attachRealTimeCalculations(itemRow) {
 }
 const itemRow = document.querySelector(".item-row");
 attachRealTimeCalculations(itemRow);
+
 //////////////////////////////////////////////////////////////////////
 ///////////////////// Save the invoice data ////////////////////////
 const saveBTN = document.getElementById("save");
@@ -558,6 +559,8 @@ saveBTN.addEventListener("click", async () => {
   const items = [];
   const payDebt = document.querySelector(".payDebt");
   const totalDebt = document.querySelector(".totalDebt");
+  const note = document.querySelector(".note-input").value;
+
   console.log(lastAfterDiscount.innerText);
   console.log(payDebt.innerText);
   console.log(totalDebt.innerText);
@@ -573,6 +576,9 @@ saveBTN.addEventListener("click", async () => {
   formData.append("after_discount", parseInt(lastAfterDiscount.innerText));
   formData.append("pay_debt", parseInt(lastPayDebt.innerText));
   formData.append("total_debt", parseInt(lastTotalDebt.innerText));
+  formData.append("note", note);
+
+  console.log(note);
   // Append item data to FormData
   itemRows.forEach((row) => {
     const cells = row.querySelectorAll(
@@ -727,6 +733,7 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
       .then((response) => response.json())
       .then((responseData) => {
         data = responseData;
+        console.log(data.results);
         const results = data.results;
         autocompleteResults.innerHTML = "";
         if (results.length !== 0) {
@@ -741,6 +748,7 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
           option.classList.add("autocompleteOption");
           option.addEventListener("click", function () {
             selectCustomer(customer);
+            console.log(customer);
           });
           autocompleteResults.appendChild(option);
         });
@@ -787,6 +795,16 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
   }
 
   function selectCustomer(customer) {
+    let totalInvoiceAmount = 0;
+    let totalTransactionAmount = 0;
+    console.log(customer);
+    customer.invoices.forEach((invoice) => {
+      totalInvoiceAmount += parseFloat(invoice.after_discount);
+    });
+    customer.transactions.forEach((transaction) => {
+      totalTransactionAmount += parseFloat(transaction.amount);
+    });
+
     document.querySelectorAll(".clientName").forEach((ele) => {
       ele.value = customer.customer_name;
     });
@@ -797,7 +815,9 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
       ele.value = customer.customer_phone || " ";
     });
     document.querySelectorAll(".totalDebt").forEach((ele) => {
-      ele.innerText = customer.total_debt;
+      console.log(totalTransactionAmount, totalInvoiceAmount);
+      ele.innerText = totalInvoiceAmount - totalTransactionAmount;
+      console.log(totalInvoiceAmount - totalTransactionAmount);
     });
     autocompleteResults.innerHTML = "";
     autocompleteResults.style.display = "none";

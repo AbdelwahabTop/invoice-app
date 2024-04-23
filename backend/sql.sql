@@ -2,7 +2,8 @@ CREATE TABLE customer (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_name VARCHAR(255) NOT NULL UNIQUE,
     customer_phone VARCHAR(20),
-    customer_address VARCHAR(255)
+    customer_address VARCHAR(255),
+    /*total_debt INT NOT NULL DEFAULT 0*/
 );
 
 CREATE TABLE invoice (
@@ -25,4 +26,13 @@ CREATE TABLE items (
     total_price DECIMAL(10, 2) NOT NULL,
     invoice_id INT,
     FOREIGN KEY (invoice_id) REFERENCES invoice(id)
+);
+
+CREATE TABLE transaction (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    date DATE NOT NULL,
+    notes TEXT,
+    FOREIGN KEY (customer_id) REFERENCES customer(id)
 );

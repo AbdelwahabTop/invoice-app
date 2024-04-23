@@ -164,9 +164,9 @@
           <!-- مجموع الاسعار والخصم والباقي  ------------------------------------------------------->
           <div class="navr">
             <div class="row">
-              <div class="note">
+              <div  class="note">
                 <p>
-                  الملاحظات :&nbsp;&nbsp;<span style="font-weight: 400">تم ارسال البضاعة بواسطة شركة اور لتوصيل السريع</span>
+                : الملاحظات &nbsp;&nbsp; <textarea class="note-input " placeholder="أكتب الملاحظات هنا..." rows="4"></textarea> 
                 </p>
               </div>
             </div>
@@ -232,5 +232,4 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="module" src="scripts/main.js"></script>
-
 </html>

@@ -28,35 +28,27 @@ $("#report-page").on("click", function () {
 async function renderTable(invoices) {
   try {
     if (!invoices) {
-      invoices = (await fetchAllCustomers()).clients;
+      invoices = await fetchAllCustomers();
       console.log(invoices);
     }
     const invoiceTable = $("#invoiceTable").DataTable();
     invoiceTable.clear().draw();
     invoices.forEach(async (invoice) => {
-      if (invoice.total_debt > 0) {
+      if (invoice.totalDebt > 0) {
         const row = invoiceTable.row
           .add([
             invoice.customer_name,
-            invoice.total_debt,
-            `
-            <input class="debt-input" type="text" data-customer-id="${invoice.id}" value="" />
-            <button class="debt-btn" data-customer-id="${invoice.id}">تسديد</button>
-        `,
+            invoice.totalInvoiceAmount,
+            invoice.totalTransactionAmount,
+            invoice.totalDebt,
           ])
           .draw(false)
           .node();
 
-        $(row)
-          .find(".debt-btn")
-          .click(function () {
-            const customerId = $(this).data("customer-id");
-            const paymentAmount = $(
-              `input[data-customer-id="${customerId}"]`
-            ).val();
-            const totalDebt = invoice.total_debt;
-            makePayment(customerId, totalDebt, paymentAmount);
-          });
+        $(row).click(function () {
+          const customerId = invoice.id;
+          openPaymentModal(customerId);
+        });
       }
     });
   } catch (error) {
@@ -64,19 +56,42 @@ async function renderTable(invoices) {
   }
 }
 
-async function makePayment(customerId, totalDebt, paymentAmount) {
-  // Send payment information to the server for the specific customer
+function openPaymentModal(customerId) {
+  $("#invoiceModal").css("display", "block");
+  $("#invoiceModal").attr("data-customer-id", customerId);
+
+  console.log("Opening payment modal for customer with ID:", customerId, note);
+}
+
+$(document).ready(function () {
+  $("#pay").click(function () {
+    const customerId = $("#invoiceModal").attr("data-customer-id");
+    const paymentAmount = $("#customerName").val();
+    const note = $("#noteText").val();
+    console.log(customerId, paymentAmount, note);
+    makePayment(customerId, paymentAmount, note);
+  });
+});
+
+async function makePayment(customerId, paymentAmount, note) {
+  console.log(
+    "Making payment for customer with ID:",
+    customerId,
+    paymentAmount,
+    note
+  );
   $.ajax({
     url: `${BASE_URL}update_debt`,
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({
       customerId: customerId,
-      totalDebt: totalDebt,
       paymentAmount: paymentAmount,
+      note: note,
     }),
     success: function (response) {
       try {
+        console.log("Payment response:", response);
         Swal.fire({
           title: "تم تسديد المبلغ بنجاح",
           icon: "success",
@@ -84,7 +99,7 @@ async function makePayment(customerId, totalDebt, paymentAmount) {
         });
         // Update the table with the new data after successful payment
         console.log(
-          `Making payment of ${paymentAmount} for customer with ID ${customerId}`
+          `Making payment of ${paymentAmount} for customer with ID ${customerId} and note ${note}`
         );
       } catch (error) {
         console.error("Error updating table after payment:", error);
@@ -92,6 +107,7 @@ async function makePayment(customerId, totalDebt, paymentAmount) {
     },
     error: function (xhr, status, error) {
       try {
+        console.error("Error making payment:", error);
         Swal.fire({
           title: "حدثت مشكلة اثناء التسديد, الرجاءاعادة المحاولة",
           icon: "error",
@@ -107,7 +123,30 @@ async function makePayment(customerId, totalDebt, paymentAmount) {
 async function fetchAllCustomers() {
   try {
     const response = await fetch(`${BASE_URL}clients`);
-    const data = await response.json();
+    const data = (await response.json()).clients;
+    console.log("Fetched invoices:", data);
+    data.forEach((customer) => {
+      let totalInvoiceAmount = 0;
+      let totalTransactionAmount = 0;
+
+      // Calculate total after_discount for invoices
+      customer.invoices.forEach((invoice) => {
+        totalInvoiceAmount += parseFloat(invoice.after_discount);
+      });
+
+      // Calculate total amount for transactions
+      customer.transactions.forEach((transaction) => {
+        totalTransactionAmount += parseFloat(transaction.amount);
+      });
+
+      // Update the customer object with the totals
+      customer.totalInvoiceAmount = totalInvoiceAmount;
+      customer.totalTransactionAmount = totalTransactionAmount;
+      customer.totalDebt =
+        totalInvoiceAmount - totalTransactionAmount > 0
+          ? totalInvoiceAmount - totalTransactionAmount
+          : 0;
+    });
     return data;
   } catch (error) {
     console.error("Error fetching invoices:", error);
@@ -116,3 +155,16 @@ async function fetchAllCustomers() {
 }
 
 renderTable();
+
+$(document).on("click", function (event) {
+  const modal = $("#invoiceModal")[0];
+  if (event.target == modal || $(event.target).hasClass("close")) {
+    closeModal();
+  }
+});
+$(".close").on("click", function () {
+  closeModal();
+});
+function closeModal() {
+  $("#invoiceModal").css("display", "none");
+}

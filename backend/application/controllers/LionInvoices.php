@@ -9,6 +9,7 @@ class LionInvoices extends CI_Controller
         $this->load->model('ClientModel');
         $this->load->model('InvoiceModel');
         $this->load->model('ItemsModel');
+        $this->load->model('TransactionModel');
     }
 
     public function getAllClients()
@@ -62,23 +63,42 @@ class LionInvoices extends CI_Controller
         return json_encode($last_invoice);
     }
 
-    public function update_debt($customer_id, $total_debt, $pay_debt)
+    public function update_debt()
     {
         $data = json_decode(file_get_contents('php://input'), true);
 
-        // Extract required fields from the POST data
         $customer_id = $data['customerId'];
-        $total_debt = $data['totalDebt'];
         $pay_debt = $data['paymentAmount'];
-        
-        if ($pay_debt >= $total_debt) {
-            $debt = 0;
-        } elseif ($pay_debt < $total_debt) {
-            $debt = $total_debt - $pay_debt;
-        } else {
-            $debt = $total_debt;
+        $note = $data['note'] || '';
+
+        var_dump($data);
+        var_dump($customer_id);
+        var_dump($pay_debt);
+        var_dump($note);
+
+        if (empty($customer_id) || empty($pay_debt)) {
+            $response['status'] = 'error';
+            $response['message'] = 'Customer ID and payment amount are required.';
+            echo json_encode($response);
+            return;
         }
-        $this->ClientModel->updateDebt($customer_id, $debt);
+
+        $data = array(
+            'customer_id' => $customer_id,
+            'amount' => $pay_debt,
+            'date' => date('Y-m-d'), // Assuming the current date
+            'notes' => $note
+        );
+
+        if ($this->TransactionModel->insertTransaction($data)) {
+            $response['status'] = 'success';
+            $response['message'] = 'Payment data inserted successfully.';
+        } else {
+            $response['status'] = 'error';
+            $response['message'] = 'Failed to insert payment data.';
+        }
+
+        echo json_encode($response);
     }
 
     public function insert()
@@ -93,30 +113,8 @@ class LionInvoices extends CI_Controller
         $after_discount = $this->input->post('after_discount');
         $pay_debt = $this->input->post('pay_debt');
         $total_debt = $this->input->post('total_debt');
+        $note = $this->input->post('note');
         $items = json_decode($this->input->post('items'), true); // Decode JSON string to array
-
-
-        if (!empty($_FILES['pdfFile']['name'])) {
-            $config['upload_path'] = 'uploads/';
-            $config['allowed_types'] = '*';
-            $config['max_size'] = 202400000; // Maximum file size in KB (10MB)
-            $config['encrypt_name'] = TRUE; // Encrypt the uploaded file's name
-            $this->load->library('upload', $config);
-
-            if (!$this->upload->do_upload('pdfFile')) {
-                $error = array('error' => $this->upload->display_errors());
-                echo json_encode($error);
-                return;
-            }
-
-            $file_info = $this->upload->data();
-            $pdf_path = 'uploads/' . $invoice_number . '.pdf';
-
-            rename($file_info['full_path'], $pdf_path);
-            var_dump("file is uploaded successfully", $pdf_path);
-        } else {
-            $pdf_path = null;
-        }
 
         // Insert customer data if not exists
         $existing_customer = $this->ClientModel->getClientsByName($customer_name);
@@ -142,8 +140,9 @@ class LionInvoices extends CI_Controller
             'discount' => $discount,
             'after_discount' => $after_discount,
             'customer_id' => $customer_id,
-            'pdf_path' => $pdf_path
+            'pdf_path' => ""
         );
+
         if ($existing_invoice) {
             $invoice_id = $existing_invoice[0]['id'];
             $this->InvoiceModel->update($invoice_data, $invoice_id);
@@ -153,8 +152,18 @@ class LionInvoices extends CI_Controller
             $this->InvoiceModel->insert($invoice_data);
             $invoice_id = $this->db->insert_id();
         }      
-        
-        if (($pay_debt - $after_discount) >= $total_debt) {
+
+        //Transaction data
+        $data = array(
+            'customer_id' => $customer_id,
+            'amount' => $pay_debt,
+            'date' => $invoice_date,
+            'notes' => $note,
+        );
+
+        $this->TransactionModel->insertTransaction($data);
+
+        /*if (($pay_debt - $after_discount) >= $total_debt) {
             $debt = 0;
         } elseif ($pay_debt < $after_discount) {
             $debt = ($after_discount - $pay_debt) + $total_debt;
@@ -162,9 +171,7 @@ class LionInvoices extends CI_Controller
             $debt = $total_debt - ($pay_debt - $after_discount);
         } else {
             $debt = $total_debt;
-        }
-
-        $this->ClientModel->updateDebt($customer_id, $debt);
+        } */
 
         // Items data
         if (!empty($items) && is_array($items)) {
