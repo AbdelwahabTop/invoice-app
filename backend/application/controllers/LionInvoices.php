@@ -69,7 +69,8 @@ class LionInvoices extends CI_Controller
 
         $customer_id = $data['customerId'];
         $pay_debt = $data['paymentAmount'];
-        $note = $data['note'] || '';
+        $date = $data['date'];
+        $note = $data['note'];
 
         var_dump($data);
         var_dump($customer_id);
@@ -86,7 +87,7 @@ class LionInvoices extends CI_Controller
         $data = array(
             'customer_id' => $customer_id,
             'amount' => $pay_debt,
-            'date' => date('Y-m-d'), // Assuming the current date
+            'date' => $date, // Assuming the current date
             'notes' => $note
         );
 

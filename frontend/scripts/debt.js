@@ -60,25 +60,27 @@ function openPaymentModal(customerId) {
   $("#invoiceModal").css("display", "block");
   $("#invoiceModal").attr("data-customer-id", customerId);
 
-  console.log("Opening payment modal for customer with ID:", customerId, note);
+  console.log("Opening payment modal for customer with ID:", customerId);
 }
 
 $(document).ready(function () {
   $("#pay").click(function () {
     const customerId = $("#invoiceModal").attr("data-customer-id");
     const paymentAmount = $("#customerName").val();
+    const date = $("#dateInput").val();
     const note = $("#noteText").val();
     console.log(customerId, paymentAmount, note);
-    makePayment(customerId, paymentAmount, note);
+    makePayment(customerId, paymentAmount, note, date);
   });
 });
 
-async function makePayment(customerId, paymentAmount, note) {
+async function makePayment(customerId, paymentAmount, note, date) {
   console.log(
     "Making payment for customer with ID:",
     customerId,
     paymentAmount,
-    note
+    note,
+    date
   );
   $.ajax({
     url: `${BASE_URL}update_debt`,
@@ -87,6 +89,7 @@ async function makePayment(customerId, paymentAmount, note) {
     data: JSON.stringify({
       customerId: customerId,
       paymentAmount: paymentAmount,
+      date: date,
       note: note,
     }),
     success: function (response) {
