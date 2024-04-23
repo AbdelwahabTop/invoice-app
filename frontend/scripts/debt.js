@@ -100,6 +100,9 @@ async function makePayment(customerId, paymentAmount, note, date) {
           icon: "success",
           confirmButtonText: "حسنا",
         });
+        $("#customerName").val("");
+        $("#dateInput").val("");
+        $("#noteText").val("");
         // Update the table with the new data after successful payment
         console.log(
           `Making payment of ${paymentAmount} for customer with ID ${customerId} and note ${note}`

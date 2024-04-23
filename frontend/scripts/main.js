@@ -534,7 +534,7 @@ function attachRealTimeCalculations(itemRow) {
 
   [meterInput, priceInput].forEach((input) => {
     input.addEventListener("input", () => {
-      const meter = parseInt(meterInput.innerText) || 0;
+      const meter = parseFloat(meterInput.innerText) || 0;
       const price = parseFloat(priceInput.innerText) || 0;
 
       if (!isNaN(meter) && !isNaN(price)) {
