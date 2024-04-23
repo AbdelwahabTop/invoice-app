@@ -24,6 +24,9 @@ document.getElementById("route").addEventListener("click", function () {
 document.getElementById("report-page").addEventListener("click", function () {
   window.location.href = "http://localhost/files/frontend/time.html";
 });
+document.getElementById("debt-page").addEventListener("click", function () {
+  window.location.href = "http://localhost/files/frontend/debt.html";
+});
 
 function parseURLParams() {
   const queryParams = new URLSearchParams(window.location.search);
@@ -65,6 +68,10 @@ var lastDiscount = discountEles[discountEles.length - 1];
 var lastAfterDiscount = afterDiscountEles[afterDiscountEles.length - 1];
 var invTotalSec = document.querySelectorAll(".total");
 var lastTotal = invTotalSec[invTotalSec.length - 1];
+var totalDebt = document.querySelectorAll(".totalDebt");
+var lastTotalDebt = totalDebt[totalDebt.length - 1];
+var payDebt = document.querySelectorAll(".payDebt");
+var lastPayDebt = payDebt[payDebt.length - 1];
 
 lastDiscount.addEventListener("input", () => {
   calcTotal();
@@ -77,6 +84,10 @@ function reSelectElements() {
   afterDiscountEles = document.querySelectorAll(".after-discount");
   lastDiscount = discountEles[discountEles.length - 1];
   lastAfterDiscount = afterDiscountEles[afterDiscountEles.length - 1];
+  totalDebt = document.querySelectorAll(".totalDebt");
+  lastTotalDebt = totalDebt[totalDebt.length - 1];
+  payDebt = document.querySelectorAll(".payDebt");
+  lastPayDebt = payDebt[payDebt.length - 1];
 }
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////////// Create New Page ////////////////////////////////////
@@ -155,6 +166,9 @@ function createNewPage(num) {
         <div class="cell5"><p>متــر</p></div>
         <div class="cell6"><p>ســعر الجملة</p></div>
         <div class="cell7"><p>المبلغ الكلــي</p></div>
+        <div class="cell8">
+        <p>حذف</p>
+      </div>
       </div>
     </div>
     <div class="listinfo open" id="itemContainer">
@@ -199,16 +213,24 @@ function createNewPage(num) {
         </div>
 
         <div class="row">
-          <div class="cell1"><p>الواصل</p></div>
-          <!-- | -->
-          <div class="cell2"><p>&nbsp;</p></div>
+        <div  class="cell1 ">
+          <p>الواصل</p>
         </div>
+        <!-- | -->
+        <div contenteditable="true" class="cell2 payDebt">
+          <p>&nbsp;</p>
+        </div>
+      </div>
 
-        <div class="row">
-          <div class="cell1"><p>المتبقي</p></div>
-          <!-- | -->
-          <div class="cell2"><p>&nbsp;</p></div>
+      <div class="row">
+        <div class="cell1 ">
+          <p>الدين السابق</p>
         </div>
+        <!-- | -->
+        <div class="cell2 totalDebt">
+          <p>&nbsp;</p>
+        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -257,6 +279,8 @@ function autoFillCusData() {
 /////////////// عند انشاء صفحة جديدة تفريغ بيانات السعر والخصم من الصفحات القديمة ووضعه بالصفحة الجديدة //////////
 function resetValues() {
   let discountNum = discountEles[discountEles.length - 2].innerText;
+  let total_debt = totalDebt[totalDebt.length - 2].innerText;
+  let pay_debt = payDebt[payDebt.length - 2].innerText;
   invTotalSec.forEach((ele) => {
     ele.innerText = " ";
   });
@@ -266,7 +290,15 @@ function resetValues() {
   afterDiscountEles.forEach((ele) => {
     ele.innerText = "";
   });
+  totalDebt.forEach((ele) => {
+    ele.innerText = "";
+  });
+  payDebt.forEach((ele) => {
+    ele.innerText = "";
+  });
   lastDiscount.innerText = discountNum;
+  lastTotalDebt.innerText = total_debt;
+  lastPayDebt.innerText = pay_debt;
 
   lastDiscount.addEventListener("input", (e) => {
     calcTotal();
@@ -283,10 +315,9 @@ const calcTotal = () => {
       total += parseFloat(item.innerText.replace(/,/g, ""));
     });
   }
-  lastTotal.innerText = total.toFixed(2);
+  lastTotal.innerText = total;
   if (total >= parseFloat(lastDiscount.innerText)) {
-    lastAfterDiscount.innerText =
-      total.toFixed(2) - parseFloat(lastDiscount.innerText).toFixed(2);
+    lastAfterDiscount.innerText = total - parseFloat(lastDiscount.innerText);
   } else {
     lastAfterDiscount.innerText = "الخصم كبير او اجعل الخصم صفر";
   }
@@ -304,6 +335,7 @@ var currentItemCount = 0;
 var currentPage = document.querySelector(".book .page");
 var elePerPage = [1];
 var containerID = "#page";
+var currentCell = 1;
 function getElementByXpath(path, parent) {
   return document.evaluate(
     path,
@@ -326,14 +358,16 @@ function addNewItem(pointerEvent, price, totalPrice, quantity, itemName) {
   for (let i = 0; i < elePerPage.length; i++) {
     if (elePerPage[i] < maximumItemsPerPage) {
       elePerPage[i]++;
+      // console.log(elePerPage);
       let parent = document
         .querySelector(containerID + i)
         .querySelector(".center")
         .querySelector(`#itemContainer`);
 
-      let currentCell = elePerPage.reduce((acc, currVal) => {
-        return acc + currVal;
-      }, 0);
+      // currentCell = elePerPage.reduce((acc, currVal) => {
+      //   return acc + currVal;
+      // }, 0);
+      currentCell++;
 
       parent.append(generateItemRow(currentCell, qty, money, totalMony, item));
       break;
@@ -355,14 +389,16 @@ function generateItemRow(colNum, quantity, price, totalPrice, itemName) {
   </div>
   <ul class="itemAutocomplete"></ul>
     <div contenteditable="true" class="cell3 qty"><p>${quantity}</p></div>
-    <div class="cell4 cm"><p>00</p></div>
-    <div class="cell5 meter">
-      <p class="c1">00</p>
+    <div contenteditable="true" class="cell5 meter">
+      <p class="c1">00.00</p>
     </div>
     <div contenteditable="true" class="cell6 price">
       <p class="c1">${price}</p>
     </div>
     <div class="cell7 total-price"><p>${totalPrice}</p></div>
+    <div class="cell8 delete">
+    <i class="fa-solid fa-trash-can" style="color: #f20d0d;"></i>            
+   </div>
   </div>`;
 
   // Create a temporary div element to attach the new row
@@ -376,15 +412,58 @@ function generateItemRow(colNum, quantity, price, totalPrice, itemName) {
 
   const newItemAutocomplete = newItemRow.querySelector(".itemAutocomplete");
   const newItemPrice = newItemRow.querySelector(".cell6");
+  // const newItemMeter = newItemRow.querySelector(".cell5");
+
+  // newItemPrice.addEventListener("click", function () {
+  //   newItemPrice.querySelector(".c1").textContent = " ";
+  //   // newItemPrice.querySelector(".c1").focus();
+  // });
+
+  // newItemMeter.addEventListener("click", function () {
+  //   newItemMeter.querySelector(".c1").textContent = " ";
+  //   // newItemMeter.querySelector(".c1").focus();
+  // });
+
   attachAutocompleteListener(
     newItemNameInput,
     newItemAutocomplete,
     newItemPrice
   );
   attachRealTimeCalculations(newItemRow);
+  const deleteBtn = newItemRow.querySelector(".delete");
+  deleteBtn.addEventListener("click", handleDelete);
 
   return newItemRow;
 }
+/////////////////////////////Delete Item////////////////////////////////
+function addDeleteListeners() {
+  const deleteButtons = document.querySelectorAll(".delete");
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", handleDelete);
+  });
+}
+
+function handleDelete(event) {
+  const row = event.target.closest(".item-row");
+  if (row) {
+    row.remove();
+    calcTotal();
+    updateRowNumbers();
+  }
+}
+
+function updateRowNumbers() {
+  const rows = document.querySelectorAll(".item-row");
+  let rowNum = 1;
+  rows.forEach((row) => {
+    row.querySelector(".cell0 p").textContent = rowNum++;
+  });
+  currentCell = rowNum - 1;
+  // console.log(elePerPage);
+}
+
+addDeleteListeners();
+///////////////////////////////////////////////////////////////////////////////
 
 document.getElementById("add").addEventListener("click", addNewItem);
 //////////////////////////////////////////////////
@@ -396,7 +475,14 @@ async function showInvoiceInMainPage(invoiceId) {
     const invoiceData = (await invoiceResponse.json()).invoice;
     const items = invoiceData.items;
 
-    items.forEach((item) => {
+    const firstItem = items[0];
+    // const mainRow = document.getElementById("main-row");
+    document.querySelector(".itemNameInput").value = firstItem.name;
+    document.querySelector(".qty").innerText = firstItem.quantity;
+    document.querySelector(".price").innerText = firstItem.price;
+    document.querySelector(".total-price").innerText = firstItem.total_price;
+
+    items.slice(1).forEach((item) => {
       addNewItem("", item.price, item.total_price, item.qty, item.name);
     });
     CUSTOMER_NAME.value = invoiceData.customer_name;
@@ -416,14 +502,14 @@ async function showInvoiceInMainPage(invoiceId) {
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 function calculateRowTotalPrice(itemRow) {
-  const qty = parseInt(itemRow.querySelector(".qty").innerText);
+  const qty = parseInt(itemRow.querySelector(".meter").innerText);
   const price = parseFloat(itemRow.querySelector(".price").innerText);
   const totalPriceDisplay = itemRow.querySelector(".total-price");
 
   // Check if all inputs are valid numbers
   if (!isNaN(qty) && !isNaN(price)) {
     const totalPrice = qty * price;
-    totalPriceDisplay.innerText = totalPrice.toFixed(2);
+    totalPriceDisplay.innerText = totalPrice;
     calcTotal();
   } else {
     totalPriceDisplay.innerText =
@@ -431,18 +517,29 @@ function calculateRowTotalPrice(itemRow) {
   }
 }
 function attachRealTimeCalculations(itemRow) {
-  const qtyInput = itemRow.querySelector(".qty");
+  // const qtyInput = itemRow.querySelector(".qty");
+  const meterInput = itemRow.querySelector(".meter");
   const priceInput = itemRow.querySelector(".price");
   const totalPriceDisplay = itemRow.querySelector(".total-price");
 
-  [qtyInput, priceInput].forEach((input) => {
+  priceInput.addEventListener("click", function () {
+    priceInput.querySelector(".c1").textContent = " ";
+    // newItemPrice.querySelector(".c1").focus();
+  });
+
+  meterInput.addEventListener("click", function () {
+    meterInput.querySelector(".c1").textContent = " ";
+    // newItemMeter.querySelector(".c1").focus();
+  });
+
+  [meterInput, priceInput].forEach((input) => {
     input.addEventListener("input", () => {
-      const qty = parseInt(qtyInput.innerText) || 0;
+      const meter = parseInt(meterInput.innerText) || 0;
       const price = parseFloat(priceInput.innerText) || 0;
 
-      if (!isNaN(qty) && !isNaN(price)) {
-        const totalPrice = qty * price;
-        totalPriceDisplay.innerText = totalPrice.toFixed(2);
+      if (!isNaN(meter) && !isNaN(price)) {
+        const totalPrice = meter * price;
+        totalPriceDisplay.innerText = totalPrice;
         calcTotal();
       } else {
         totalPriceDisplay.innerText =
@@ -459,129 +556,154 @@ const saveBTN = document.getElementById("save");
 saveBTN.addEventListener("click", async () => {
   const itemRows = document.querySelectorAll(".item-row");
   const items = [];
+  const payDebt = document.querySelector(".payDebt");
+  const totalDebt = document.querySelector(".totalDebt");
+  console.log(lastAfterDiscount.innerText);
+  console.log(payDebt.innerText);
+  console.log(totalDebt.innerText);
 
+  const formData = new FormData();
+  formData.append("customer_name", CUSTOMER_NAME.value);
+  formData.append("customer_address", CUSTOMER_ADDRESS.innerText);
+  formData.append("customer_phone", CUSTOMER_PHONE.value);
+  formData.append("invoice_number", INVOICE_NUM.innerText);
+  formData.append("invoice_date", INVOICE_DATE.value);
+  formData.append("invoice_total", lastTotal.innerText);
+  formData.append("discount", lastDiscount.innerText);
+  formData.append("after_discount", parseInt(lastAfterDiscount.innerText));
+  formData.append("pay_debt", parseInt(lastPayDebt.innerText));
+  formData.append("total_debt", parseInt(lastTotalDebt.innerText));
+  // Append item data to FormData
+  itemRows.forEach((row) => {
+    const cells = row.querySelectorAll(
+      ".itemNameInput, .cell5, .cell6, .cell7"
+    );
+    const itemData = {};
+
+    cells.forEach((cell, index) => {
+      switch (index) {
+        case 0:
+          itemData.item_name = cell.value;
+          break;
+        case 1:
+          itemData.qty = parseInt(cell.innerText.trim());
+          break;
+        case 2:
+          itemData.price = parseFloat(cell.innerText.trim());
+          break;
+        case 3:
+          itemData.total_price = parseFloat(cell.innerText.trim());
+          break;
+        default:
+          break;
+      }
+    });
+
+    items.push(itemData);
+  });
+
+  formData.append("items", JSON.stringify(items));
+
+  axios
+    .post(`${BASE_URL}post`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      // getLastInvoiceNumber();
+      console.log(response);
+      Swal.fire({
+        title: "تم حفظ البيانات بنجاح",
+        icon: "success",
+        confirmButtonText: "حسنا",
+      });
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      Swal.fire({
+        title: "حدثت مشكلة اثناء الحفظ, الرجاءاعادة المحاولة",
+        icon: "error",
+        confirmButtonText: "حسنا",
+      });
+    });
+});
+/////////////////////////////////////WHAT'S APP////////////////////////////////////
+document.getElementById("whatsApp").addEventListener("click", function () {
   let pdfData;
 
-  window.html2canvas = html2canvas;
-  window.jsPDF = window.jspdf.jsPDF;
-
-  document.querySelectorAll(".itemNameInput, .clientName").forEach((input) => {
+  // document.querySelectorAll(".itemNameInput, .clientName").forEach((input) => {
+  //   input.style.textAlign = "center";
+  // });
+  document.querySelectorAll(".clientName").forEach((input) => {
     input.style.textAlign = "center";
   });
-  document.querySelector(".book").style.width = "309mm";
-  document.querySelector(".book").style.height = "auto";
-  document.querySelector(".book").style.margin = "auto";
+  // document.querySelector(".book").style.width = "309mm";
+  // document.querySelector(".book").style.height = "1500px";
+  // document.querySelector(".book").style.marginRight = "15px";
+  document.querySelector(".book").style.marginTop = "-80px";
+  // document.querySelector(".page").style.hight = "230mm";
 
-  if (
-    !shouldInvokeFunction(urlParams) &&
-    document.getElementById("datepicker")
-  ) {
-    const originalDateInput = document.getElementById("datepicker");
-    console.log(originalDateInput);
-    const invoiceDateValue = originalDateInput.value;
-    const newDateDiv = document.createElement("div");
-    newDateDiv.classList.add("cell2", "auto-date");
-    const newDateParagraph = document.createElement("p");
-    newDateParagraph.textContent = invoiceDateValue;
-    newDateDiv.appendChild(newDateParagraph);
-    const parentElement = originalDateInput.parentElement;
-    parentElement.replaceChild(newDateDiv, originalDateInput);
-  }
+  // if (
+  //   !shouldInvokeFunction(urlParams) &&
+  //   document.getElementById("datepicker")
+  // ) {
+  //   const originalDateInput = document.getElementById("datepicker");
+  //   const invoiceDateValue = originalDateInput.value;
+  //   const newDateDiv = document.createElement("div");
+  //   newDateDiv.classList.add("cell2", "auto-date");
+  //   const newDateParagraph = document.createElement("p");
+  //   newDateParagraph.textContent = invoiceDateValue;
+  //   newDateDiv.appendChild(newDateParagraph);
+  //   const parentElement = originalDateInput.parentElement;
+  //   parentElement.replaceChild(newDateDiv, originalDateInput);
+  // }
+  // window.html2canvas = html2canvas;
+  // window.jsPDF = window.jspdf.jsPDF;
 
-  html2canvas(document.querySelector(".book"), {
-    scale: 1,
-    allowTaint: true,
-    useCORS: true,
-  }).then((canvas) => {
-    const imgWidth = canvas.width;
-    const imgHeight = canvas.height;
-    const aspectRatio = imgWidth / imgHeight;
-    const pdfWidth = 210;
-    const pdfHeight = pdfWidth / aspectRatio;
+  html2pdf().from(document.querySelector(".book")).set().save();
+  // html2pdf()
+  //   .from(document.querySelector(".book"))
+  //   .outputPdf("blob")
+  //   .then((pdfData) => {
+  //     const formData = new FormData();
+  //     formData.append("pdfFile", pdfData);
 
-    var img = canvas.toDataURL("image/png");
-    const pdf = new jsPDF({
-      unit: "mm",
-      format: [pdfWidth, pdfHeight],
-    });
+  //     // Now you can use the formData object for further processing, like sending it to your backend
+  //     formData.append("invoice_number", INVOICE_NUM.innerText);
+  //     // revert the styling back
+  //     document
+  //       .querySelectorAll(".itemNameInput, .clientName")
+  //       .forEach((input) => {
+  //         input.style.textAlign = "right";
+  //       });
 
-    pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.setFontSize(25);
-
-    const blob = pdf.output("blob");
-
-    pdfData = new Blob([blob], { type: "application/pdf" });
-
-    const formData = new FormData();
-    formData.append("pdfFile", pdfData);
-
-    // revert the styling back
-    document
-      .querySelectorAll(".itemNameInput, .clientName")
-      .forEach((input) => {
-        input.style.textAlign = "right";
-      });
-
-    formData.append(
-      "customer_name",
-      CUSTOMER_NAME.value || "لم يتم تسجيل اسم العميل"
-    );
-    formData.append("customer_address", CUSTOMER_ADDRESS.innerText);
-    formData.append("customer_phone", CUSTOMER_PHONE.value);
-    formData.append("invoice_number", INVOICE_NUM.innerText);
-    formData.append("invoice_date", INVOICE_DATE.value);
-    formData.append("invoice_total", lastTotal.innerText);
-    formData.append("discount", lastDiscount.innerText);
-    formData.append("after_discount", lastAfterDiscount.innerText);
-
-    // Append item data to FormData
-    itemRows.forEach((row) => {
-      const cells = row.querySelectorAll(
-        ".itemNameInput, .cell3, .cell6, .cell7"
-      );
-      const itemData = {};
-
-      cells.forEach((cell, index) => {
-        switch (index) {
-          case 0:
-            itemData.item_name = cell.value;
-            break;
-          case 1:
-            itemData.qty = parseInt(cell.innerText.trim());
-            break;
-          case 2:
-            itemData.price = parseFloat(cell.innerText.trim());
-            break;
-          case 3:
-            itemData.total_price = parseFloat(cell.innerText.trim());
-            break;
-          default:
-            break;
-        }
-      });
-
-      items.push(itemData);
-    });
-
-    formData.append("items", JSON.stringify(items));
-
-    axios
-      .post(`${BASE_URL}post`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        // getLastInvoiceNumber();
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-
-    if (!shouldInvokeFunction(urlParams)) {
-      getLastInvoiceNumber();
-    }
-  });
+  //     axios
+  //       .post(`${BASE_URL}pdf`, formData, {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       })
+  //       .then((response) => {
+  //         // getLastInvoiceNumber();
+  //         console.log(response.data);
+  //         let mes = response.data.message || "فشلت العملية";
+  //         if (response.data.error || !response.data.message) {
+  //           mes = "فشلت العملية";
+  //         } else {
+  //           mes = response.data.message;
+  //         }
+  //         let icon = response.data.num ? "success" : "error";
+  //         Swal.fire({
+  //           title: mes,
+  //           icon: icon,
+  //           confirmButtonText: "حسنا",
+  //         });
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error:", error);
+  //       });
+  //   });
 });
 ////////////////////////////////////////////////////////////////
 /////////// Autocomplete customer name //////////////////////////////////////
@@ -674,6 +796,9 @@ function setupCustomerAutocomplete(customerNameInput, autocompleteResults) {
     document.querySelectorAll(".clientPhone").forEach((ele) => {
       ele.value = customer.customer_phone || " ";
     });
+    document.querySelectorAll(".totalDebt").forEach((ele) => {
+      ele.innerText = customer.total_debt;
+    });
     autocompleteResults.innerHTML = "";
     autocompleteResults.style.display = "none";
   }
@@ -709,19 +834,19 @@ $(function () {
   });
 });
 ////////////// Get last inserted invoice number ///////////////////////////////////////
-function getLastInvoiceNumber() {
-  fetch(`${BASE_URL}get_last_invoice`)
-    .then((response) => response.json())
-    .then((data) => {
-      const lastInvoiceNumber = data.last_invoice;
-      let invoiceNumberElements;
-      invoiceNumberElements = document.querySelectorAll(".invoiceNumber");
-      invoiceNumberElements.forEach((element) => {
-        element.innerText = parseInt(lastInvoiceNumber) + 1;
-      });
-    });
-}
-getLastInvoiceNumber();
+// function getLastInvoiceNumber() {
+//   fetch(`${BASE_URL}get_last_invoice`)
+//     .then((response) => response.json())
+//     .then((data) => {
+//       const lastInvoiceNumber = data.last_invoice;
+//       let invoiceNumberElements;
+//       invoiceNumberElements = document.querySelectorAll(".invoiceNumber");
+//       invoiceNumberElements.forEach((element) => {
+//         element.innerText = parseInt(lastInvoiceNumber) + 1;
+//       });
+//     });
+// }
+// getLastInvoiceNumber();
 ////////////////////////////////////////////////////////////////////////
 // Function to find the last inserted item price for a specific item name
 function getLastInsertedItemPrice(itemsArray, itemName) {

@@ -62,9 +62,27 @@ class LionInvoices extends CI_Controller
         return json_encode($last_invoice);
     }
 
+    public function update_debt($customer_id, $total_debt, $pay_debt)
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        // Extract required fields from the POST data
+        $customer_id = $data['customerId'];
+        $total_debt = $data['totalDebt'];
+        $pay_debt = $data['paymentAmount'];
+        
+        if ($pay_debt >= $total_debt) {
+            $debt = 0;
+        } elseif ($pay_debt < $total_debt) {
+            $debt = $total_debt - $pay_debt;
+        } else {
+            $debt = $total_debt;
+        }
+        $this->ClientModel->updateDebt($customer_id, $debt);
+    }
+
     public function insert()
     {
-        var_dump("Start");
         $customer_name = $this->input->post('customer_name');
         $customer_address = $this->input->post('customer_address');
         $customer_phone = $this->input->post('customer_phone');
@@ -73,6 +91,8 @@ class LionInvoices extends CI_Controller
         $invoice_total = $this->input->post('invoice_total');
         $discount = $this->input->post('discount');
         $after_discount = $this->input->post('after_discount');
+        $pay_debt = $this->input->post('pay_debt');
+        $total_debt = $this->input->post('total_debt');
         $items = json_decode($this->input->post('items'), true); // Decode JSON string to array
 
 
@@ -107,7 +127,7 @@ class LionInvoices extends CI_Controller
             $customer_data = array(
                 'customer_name' => $customer_name,
                 'customer_phone' => $customer_phone,
-                'customer_address' => $customer_address
+                'customer_address' => $customer_address,
             );
             $this->ClientModel->insert($customer_data);
             $customer_id = $this->db->insert_id();
@@ -125,17 +145,26 @@ class LionInvoices extends CI_Controller
             'pdf_path' => $pdf_path
         );
         if ($existing_invoice) {
-            var_dump("Start existing_invoice");
             $invoice_id = $existing_invoice[0]['id'];
             $this->InvoiceModel->update($invoice_data, $invoice_id);
-            var_dump("End existing_invoice", $invoice_data);
             $this->ItemsModel->deleteItems($invoice_id);
             var_dump("Deleted items");
         } else {
             $this->InvoiceModel->insert($invoice_data);
             $invoice_id = $this->db->insert_id();
-            var_dump("Insert new invoice", $invoice_data);
+        }      
+        
+        if (($pay_debt - $after_discount) >= $total_debt) {
+            $debt = 0;
+        } elseif ($pay_debt < $after_discount) {
+            $debt = ($after_discount - $pay_debt) + $total_debt;
+        } elseif ($pay_debt > $after_discount && ($pay_debt - $after_discount) < $total_debt) {
+            $debt = $total_debt - ($pay_debt - $after_discount);
+        } else {
+            $debt = $total_debt;
         }
+
+        $this->ClientModel->updateDebt($customer_id, $debt);
 
         // Items data
         if (!empty($items) && is_array($items)) {
@@ -152,6 +181,94 @@ class LionInvoices extends CI_Controller
             );
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid items data']);
+        }
+    }
+
+    public function insertPdf()
+    {
+        $invoice_number = $this->input->post('invoice_number');
+
+        $invoice_exists = $this->InvoiceModel->getInvoiceByNumber($invoice_number);
+        if (!$invoice_exists) {
+            echo json_encode([
+                'status' => 400,
+                'message' => 'الرجاء حفظ الفاتورة قبل ارسالها',
+                'num' => 0
+            ]);
+            return;
+        }
+
+        // echo $_FILES['pdfFile']; 
+        if (!empty($_FILES['pdfFile']['name'])) {
+            $config['upload_path'] = 'uploads/';
+            $config['allowed_types'] = '*';
+            $config['max_size'] = 202400000;
+            $config['encrypt_name'] = TRUE;
+            $this->load->library('upload', $config);
+
+            if (!$this->upload->do_upload('pdfFile')) {
+                $error = array('error' => $this->upload->display_errors());
+                echo json_encode(['status' => 400, 'message' => 'فشلت العملية']);
+                return;
+            }
+
+            $file_info = $this->upload->data();
+            $pdf_path = 'uploads/' . $invoice_number . '.pdf';
+
+            rename($file_info['full_path'], $pdf_path);
+            $this->InvoiceModel->updateInvoicePDF($invoice_number, $pdf_path);
+            // $this->sendPDFToWhatsApp($pdf_path);
+            if ($this->sendPDFToWhatsApp($pdf_path)) {
+                echo json_encode(['status' => 200, 'message' => 'تم رفع الملف بنجاح', 'num' => 1]);
+            } else {
+                echo json_encode(['status' => 400, 'message' => 'فشلت العملية', 'num' => 0]);
+            }
+        } else {
+            $pdf_path = null;
+            echo json_encode(['status' => 400, 'message' => 'لانه اللبيلسئبل فشلت العملية', 'num' => 0]);
+        }
+    }
+
+    private function sendPDFToWhatsApp($pdf_path)
+    {
+        $params = array(
+            'token' => 'vfjr8idxcdx94r89',
+            'to' => '+201016210953',
+            'filename' => 'invoice.pdf',
+            'document' =>  $pdf_path,
+            'caption' => 'document caption'
+        );
+
+        // Send request to WhatsApp API
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.ultramsg.com/instance80996/messages/document",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => http_build_query($params),
+            CURLOPT_HTTPHEADER => array(
+                "content-type: application/x-www-form-urlencoded"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } elseif ($response) {
+            echo $response;
+            return true;
+        } else {
+            echo $response;
         }
     }
 

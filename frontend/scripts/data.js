@@ -1,4 +1,5 @@
 const BASE_URL = "http://localhost/files/backend/";
+//const BASE_URL = "https://goldenlion-iq.com/invoice/backend/index.php/";
 
 $(document).ready(function () {
   $("#invoiceTable").DataTable();

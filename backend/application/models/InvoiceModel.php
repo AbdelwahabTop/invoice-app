@@ -87,6 +87,12 @@ class InvoiceModel extends CI_Model
         $this->db->update('invoice', $data);
     }
 
+    public function updateInvoicePDF($invoiceNumber, $pdfPath)
+    {
+        $this->db->where('invoice_number', $invoiceNumber);
+        $this->db->update('invoice', array('pdf_path' => $pdfPath));
+    }
+
     public function get_invoices_between_dates($start_date, $end_date)
     {
         $this->db->select('invoice.*, customer.customer_name, customer.customer_phone, customer.customer_address');

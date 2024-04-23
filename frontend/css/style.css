@@ -16,6 +16,11 @@ input {
   margin-inline: 2px;
 }
 
+/* .c1::before {
+  content: "Text";
+  color: gray; 
+} */
+
 /* Auto Complete */
 .autocomplete-results {
   position: absolute;
@@ -102,6 +107,16 @@ nav ul li a {
 
 nav ul li a:hover {
   background-color: #555; /* Change background color on hover */
+}
+
+ul li img {
+  width: 80px; /* You can adjust this value as needed */
+  height: auto;
+  /* margin-right: 10px; */
+  align-items: center;
+  text-align: center;
+  position: relative;
+  top: 10px;
 }
 
 /* header option  ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
@@ -351,6 +366,14 @@ nav ul li a:hover {
   width: 15%;
   text-align: center;
   border-bottom: 5px solid #432f21;
+  margin-left: 2px;
+}
+
+.list .cell8 {
+  border-left: 0px;
+  width: 4%;
+  text-align: center;
+  border-bottom: 5px solid #a98d64;
   margin-left: 0px;
 }
 
@@ -432,6 +455,11 @@ nav ul li a:hover {
   margin-left: 2px;
 }
 
+/* .listinfo .cell6 p {
+  text-align: center;
+  margin-right: 30px;
+} */
+
 .listinfo .cell6 {
   border-left: 0px;
   width: 15%;
@@ -447,6 +475,20 @@ nav ul li a:hover {
   text-align: center;
   font-family: Cairo;
   border-bottom: 1px dotted #b7b5b5;
+}
+
+.listinfo .cell8 {
+  border-left: 0px;
+  /* width: 15%; */
+  text-align: center;
+  /* font-family: Cairo; */
+  border-bottom: 1px dotted #b7b5b5;
+  width: 4%;
+}
+
+.listinfo .cell8 i {
+  margin-left: 5px;
+  margin-top: 5px;
 }
 
 /* footer option  ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
@@ -655,7 +697,7 @@ nav ul li a:hover {
 #toggle:checked + label:after {
   content: "Close";
 }
-#save button {
+ul li button {
   padding: 8px 20px;
   font-family: "Cairo";
   background-color: #4caf50;
@@ -666,12 +708,16 @@ nav ul li a:hover {
   transition: background-color 0.3s;
 }
 
-#save button:hover {
+ul li button:hover {
   background-color: #45a049;
 }
 
-#save button:active {
+ul li button:active {
   background-color: #3e8e41;
+}
+
+#whatsApp {
+  margin-right: 10px;
 }
 
 /* print option ------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
